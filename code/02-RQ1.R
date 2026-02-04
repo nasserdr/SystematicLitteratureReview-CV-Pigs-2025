@@ -197,3 +197,4 @@ ggsave(file.path(im_spare, "alluvial_biomarker_application_subapplication.png"),
        p_alluvial, width = 50, height = 50, dpi = 400, limitsize = FALSE)
 ggsave(file.path(im_spare,"alluvial_biomarker_application_subapplication.pdf"),
        p_alluvial, width = 50, height = 50, limitsize = FALSE)
+

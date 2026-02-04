@@ -128,11 +128,13 @@ p <- ggplot(df_plot, aes(x = Behavior, y = n_signed, fill = Category)) +
     title = "How often each behavior was studied\nin Method vs Application papers"
   ) +
   theme_minimal(base_size = 13) +
+theme_classic(base_size = 13) +                                         # consistent theme
   theme(
-    panel.grid.minor = element_blank(),
-    panel.grid.major.y = element_blank(),   # cleaner category blocks
-    axis.text.y = element_text(hjust = 1, size = 12)
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    axis.title = element_text(face = "bold"),
+    plot.margin = margin(10, 40, 10, 10)                                  # extra margin for labels
   )
+
 print(p)
 ggsave(file.path(im_path, "behavior_full_figure.png"), p, width = 10, height = 10, dpi = 300)
 
@@ -140,32 +142,55 @@ ggsave(file.path(im_path, "behavior_full_figure.png"), p, width = 10, height = 1
 # ===========================================================
 # ALLUVIAL: Behavior → Biomarker
 # ===========================================================
-behav_biom_counts <- df_full_screening %>%
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(ggplot2)
+library(ggalluvial)
+library(ggfittext)
+library(tibble)
+
+# ---- Parameters ----
+BASELINE     <- 10     # increases stratum heights
+SCALE_FACTOR <- 1
+STRATUM_W    <- 0.22   # stratum rectangle width
+TEXT_W       <- 1   # text box width (match STRATUM_W)
+TEXT_SIZE    <- 6
+TEXT_MIN     <- 3
+
+# ---- Build counts ----
+behav_biom_counts2 <- df_full_screening %>%
   mutate(
-    Behavior  = str_squish(str_to_title(Behavior))
-  ) %>%
-  filter(!is.na(Behavior), Behavior != "") %>%
-  separate_rows(Behavior, sep = "\\s*(?:,|;|/|\\+|&|\\band\\b)\\s*") %>%
-  mutate(
-    Behavior  = str_squish(Behavior),
+    Behavior  = str_squish(str_to_title(Behavior)),
     Biomarker = clean_str(Biomarker)
   ) %>%
+  filter(!is.na(Behavior), Behavior != "", !is.na(Biomarker), Biomarker != "") %>%
+  separate_rows(Behavior, sep = "\\s*(?:,|;|/|\\+|&|\\band\\b)\\s*") %>%
+  mutate(
+    Behavior = str_squish(Behavior)
+  ) %>%
   filter(Behavior != "") %>%
-  count(Behavior, Biomarker, name = "n")
+  count(Behavior, Biomarker, name = "n") %>%
+  mutate(
+    weight = (n + BASELINE) * SCALE_FACTOR,
+    # multi-line labels (word-wrapping)
+    Behavior_label  = str_wrap(Behavior,  width = 14),
+    Biomarker_label = str_wrap(Biomarker, width = 14)
+  )
 
-baseline <- 0.5
-behav_biom_counts <- behav_biom_counts %>% mutate(weight = n + baseline)
-total_n_bb <- sum(behav_biom_counts$weight)
+total_n_bb <- sum(behav_biom_counts2$weight)
 
+# ---- Background bands (recomputed AFTER total_n_bb is known) ----
 bg_df_bb <- tibble(
   xmin = c(0.6, 1.6), xmax = c(1.4, 2.4),
   ymin = 0, ymax = total_n_bb,
-  fill = c("#f8fafc", "#f1f5f9")
+  fill = c("grey98", "grey95")
 )
 
+# ---- Plot ----
 p_alluvial_behav_biom <- ggplot(
-  behav_biom_counts,
-  aes(axis1 = Behavior, axis2 = Biomarker, y = weight)
+  behav_biom_counts2,
+  aes(axis1 = Behavior_label, axis2 = Biomarker_label, y = weight)
 ) +
   geom_rect(
     data = bg_df_bb,
@@ -175,18 +200,25 @@ p_alluvial_behav_biom <- ggplot(
   ) +
   scale_x_discrete(limits = c("Behavior", "Biomarker")) +
   geom_alluvium(aes(fill = Behavior), alpha = 0.7, knot.pos = 0.4) +
-  geom_stratum(width = 0.18, fill = "grey90", color = "grey40") +
+  geom_stratum(width = STRATUM_W, fill = "grey90", color = "grey40") +
   geom_fit_text(
     stat = "stratum",
     aes(label = after_stat(stratum)),
-    width = 0.18, min.size = 2, grow = TRUE, reflow = TRUE
+    width = TEXT_W,
+    size = TEXT_SIZE,
+    min.size = TEXT_MIN,
+    grow = FALSE,
+    reflow = TRUE,
+    lineheight = 0.95
   ) +
-  annotate("text",
-           x = c(1, 2), y = total_n_bb * 1.03,
-           label = c("Behavior", "Biomarker"),
-           fontface = "bold", size = 4) +
+  annotate(
+    "text",
+    x = c(1, 2), y = total_n_bb * 1.03,
+    label = c("Behavior", "Biomarker"),
+    fontface = "bold", size = 6
+  ) +
   labs(y = "Count", x = NULL) +
-  expand_limits(y = total_n_bb * 1.08) +
+  expand_limits(y = total_n_bb * 1.10) +
   theme_minimal(base_size = 12) +
   theme(
     legend.position = "none",
@@ -195,39 +227,67 @@ p_alluvial_behav_biom <- ggplot(
   )
 
 p_alluvial_behav_biom
-ggsave(file.path(im_spare,"alluvial_behavior_to_biomarker.pdf"),
-       p_alluvial_behav_biom, width = 20, height = 14, dpi = 300, limitsize = FALSE)
+
+ggsave(
+  file.path(im_spare, "alluvial_behavior_to_biomarker.tiff"),
+  p_alluvial_behav_biom,
+  width = 30, height = 30, dpi = 300, limitsize = FALSE
+)
 
 
 
 # ===========================================================
 # ALLUVIAL: Behavior → Application
 # ===========================================================
-behav_app_counts <- df_full_screening %>%
+
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(ggplot2)
+library(ggalluvial)
+library(ggfittext)
+library(tibble)
+
+# ---- Parameters ----
+BASELINE     <- 10
+SCALE_FACTOR <- 1
+STRATUM_W    <- 0.22
+TEXT_W       <- 0.22
+TEXT_SIZE    <- 15
+TEXT_MIN     <- 2
+WRAP_WIDTH   <- 7
+
+# ---- Build counts ----
+behav_app_counts2 <- df_full_screening %>%
   mutate(
-    Behavior    = str_squish(str_to_title(Behavior))
-  ) %>%
-  filter(!is.na(Behavior), Behavior != "") %>%
-  separate_rows(Behavior, sep = "\\s*(?:,|;|/|\\+|&|\\band\\b)\\s*") %>%
-  mutate(
-    Behavior    = str_squish(Behavior),
+    Behavior    = str_squish(str_to_title(Behavior)),
     Application = clean_str(Application)
   ) %>%
+  filter(!is.na(Behavior), Behavior != "",
+         !is.na(Application), Application != "") %>%
+  separate_rows(Behavior, sep = "\\s*(?:,|;|/|\\+|&|\\band\\b)\\s*") %>%
+  mutate(Behavior = str_squish(Behavior)) %>%
   filter(Behavior != "") %>%
-  count(Behavior, Application, name = "n")
+  count(Behavior, Application, name = "n") %>%
+  mutate(
+    weight = (n + BASELINE) * SCALE_FACTOR,
+    Behavior_label    = str_wrap(Behavior,    width = WRAP_WIDTH),
+    Application_label = str_wrap(Application, width = WRAP_WIDTH)
+  )
 
-behav_app_counts <- behav_app_counts %>% mutate(weight = n + baseline)
-total_n_ba <- sum(behav_app_counts$weight)
+total_n_ba <- sum(behav_app_counts2$weight)
 
+# ---- Background bands (recomputed AFTER total is known) ----
 bg_df_ba <- tibble(
   xmin = c(0.6, 1.6), xmax = c(1.4, 2.4),
   ymin = 0, ymax = total_n_ba,
-  fill = c("#f8fafc", "#f1f5f9")
+  fill = c("grey98", "grey95")
 )
 
+# ---- Plot ----
 p_alluvial_behav_app <- ggplot(
-  behav_app_counts,
-  aes(axis1 = Behavior, axis2 = Application, y = weight)
+  behav_app_counts2,
+  aes(axis1 = Behavior_label, axis2 = Application_label, y = weight)
 ) +
   geom_rect(
     data = bg_df_ba,
@@ -237,18 +297,25 @@ p_alluvial_behav_app <- ggplot(
   ) +
   scale_x_discrete(limits = c("Behavior", "Application")) +
   geom_alluvium(aes(fill = Behavior), alpha = 0.7, knot.pos = 0.4) +
-  geom_stratum(width = 0.18, fill = "grey90", color = "grey40") +
+  geom_stratum(width = STRATUM_W, fill = "grey90", color = "grey40") +
   geom_fit_text(
     stat = "stratum",
     aes(label = after_stat(stratum)),
-    width = 0.18, min.size = 2, grow = TRUE, reflow = TRUE
+    width = TEXT_W,
+    size = TEXT_SIZE,
+    min.size = TEXT_MIN,
+    grow = FALSE,
+    reflow = TRUE,
+    lineheight = 0.95
   ) +
-  annotate("text",
-           x = c(1, 2), y = total_n_ba * 1.03,
-           label = c("Behavior", "Application"),
-           fontface = "bold", size = 4) +
+  annotate(
+    "text",
+    x = c(1, 2), y = total_n_ba * 1.03,
+    label = c("Behavior", "Application"),
+    fontface = "bold", size = 6
+  ) +
   labs(y = "Count", x = NULL) +
-  expand_limits(y = total_n_ba * 1.08) +
+  expand_limits(y = total_n_ba * 1.10) +
   theme_minimal(base_size = 12) +
   theme(
     legend.position = "none",
@@ -257,9 +324,12 @@ p_alluvial_behav_app <- ggplot(
   )
 
 p_alluvial_behav_app
-ggsave(file.path(im_path,"alluvial_behavior_to_application.pdf"),
-       p_alluvial_behav_app, width = 20, height = 14, dpi = 300, limitsize = FALSE)
 
+ggsave(
+  file.path(im_path, "alluvial_behavior_to_application.tiff"),
+  p_alluvial_behav_app,
+  width = 20, height = 14, dpi = 300, limitsize = FALSE
+)
 
 # ===========================================================
 # ALLUVIAL: Behavior Category → Application

@@ -99,6 +99,7 @@ journal_counts_by_type <- df_j2 %>%
   ungroup() %>%
   mutate(Journal_re = tidytext::reorder_within(Journal, n, paper_type))
 
+
 # 3) Plot --------------------------------------------------------------
 p_topk <- ggplot(journal_counts_by_type, aes(x = Journal, y = n)) +
   geom_col(fill = "#4E79A7", width = 0.75) +
