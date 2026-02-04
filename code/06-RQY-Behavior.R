@@ -71,7 +71,7 @@
 # print(p)
 # 
 # ggsave(
-#   filename = file.path(im_path, "behavior_distribution_by_studytype_horizontal.tiff"),
+#   filename = file.path(im_path, "behavior_distribution_by_studytype_horizontal.pdf"),
 #   plot = p,
 #   width = 30, height = 15, dpi = 300
 # )
@@ -195,7 +195,7 @@ p_alluvial_behav_biom <- ggplot(
   )
 
 p_alluvial_behav_biom
-ggsave(file.path(im_spare,"alluvial_behavior_to_biomarker.tiff"),
+ggsave(file.path(im_spare,"alluvial_behavior_to_biomarker.pdf"),
        p_alluvial_behav_biom, width = 20, height = 14, dpi = 300, limitsize = FALSE)
 
 
@@ -257,7 +257,7 @@ p_alluvial_behav_app <- ggplot(
   )
 
 p_alluvial_behav_app
-ggsave(file.path(im_path,"alluvial_behavior_to_application.tiff"),
+ggsave(file.path(im_path,"alluvial_behavior_to_application.pdf"),
        p_alluvial_behav_app, width = 20, height = 14, dpi = 300, limitsize = FALSE)
 
 
@@ -339,6 +339,6 @@ p_alluvial_cat_app <- ggplot(
 p_alluvial_cat_app
 
 # Save (keeping your sizes)
-ggsave(file.path(im_spare,"alluvial_category_to_application.tiff"),
+ggsave(file.path(im_spare,"alluvial_category_to_application.pdf"),
        p_alluvial_cat_app, width = 20, height = 14, dpi = 300, limitsize = FALSE)
 

@@ -54,7 +54,7 @@ p <- ggplot(metrics_long, aes(x = value, y = Metric)) +
   )
 h_inches <- 4 + 0.28 * length(unique(metrics_long$Metric))
 p
-ggsave(file.path(im_path,"performance_metrics_boxplots_sorted_by_range.tiff"),
+ggsave(file.path(im_path,"performance_metrics_boxplots_sorted_by_range.png"),
        plot = p, width = 12, height = h_inches, dpi = 300)
 
 
