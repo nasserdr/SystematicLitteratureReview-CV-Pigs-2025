@@ -101,5 +101,5 @@ p_usage <- ggplot(metric_usage, aes(x = fct_reorder(Metric, Count), y = Count)) 
   )
 
 print(p_usage)
-ggsave(file.path(im_path,"metric_usage_barplot.tiff"),
+ggsave(file.path(im_path,"metric_usage_barplot.png"),
        plot = p_usage, width = 10, height = 8, dpi = 300)
