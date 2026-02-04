@@ -27,6 +27,12 @@ p_challenges <- ggplot(challenge_counts, aes(x = reorder(Challenge, Count), y = 
   ) +
   theme_classic(base_size = 13) +                                         # consistent theme
   theme(
+    axis.text.x  = element_text(hjust = 1,size = 14),
+    axis.text.y  = element_text(size = 14),
+    axis.title.x = element_text(size = 14, face = "bold"),
+    axis.title.y = element_text(size = 14, face = "bold"),
+    legend.text  = element_text(size = 14),
+    
     plot.title = element_text(hjust = 0.5, face = "bold"),
     axis.title = element_text(face = "bold"),
     plot.margin = margin(10, 40, 10, 10)                                  # extra margin for labels

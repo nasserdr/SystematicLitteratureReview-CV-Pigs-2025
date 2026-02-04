@@ -23,6 +23,12 @@ p <- ggplot(tasks_count, aes(x = CV_Task, y = n)) +
   labs(x = "Computer Vision Task", y = "Number of Studies") +
   theme_classic(base_size = 14) +
   theme(
+    axis.text.x  = element_text(angle = 35, hjust = 1,size = 14),
+    axis.text.y  = element_text(size = 14),
+    axis.title.x = element_text(size = 14, face = "bold"),
+    axis.title.y = element_text(size = 14, face = "bold"),
+    legend.text  = element_text(size = 14),
+    
     plot.title = element_text(hjust = 0.5, face = "bold"),
     axis.title = element_text(face = "bold"),
     legend.position = "top"
@@ -67,8 +73,13 @@ p_models <- ggplot(models_ge2, aes(x = fct_reorder(Family, Count), y = Count)) +
   ) +
   theme_classic(base_size = 14) +
   theme(
+    axis.text.x  = element_text(hjust = 1,size = 14),
+    axis.text.y  = element_text(size = 14),
+    axis.title.x = element_text(size = 14, face = "bold"),
+    axis.title.y = element_text(size = 14, face = "bold"),
+    legend.text  = element_text(size = 14),
+    
     plot.title = element_text(hjust = 0.5, face = "bold"),
-    axis.title.y = element_text(face = "bold"),
     plot.margin = margin(10, 30, 10, 10)  # room for right-side labels
   )
 
@@ -119,6 +130,12 @@ p <- ggplot(per_year_counts, aes(x = factor(Year), y = count, fill = Family)) +
   ) +
   theme_minimal(base_size = 14) +
   theme(
+    axis.text.x  = element_text(hjust = 1,size = 14),
+    axis.text.y  = element_text(size = 14),
+    axis.title.x = element_text(size = 14, face = "bold"),
+    axis.title.y = element_text(size = 14, face = "bold"),
+    legend.text  = element_text(size = 14),
+    
     plot.title   = element_text(hjust = 0.5, face = "bold"),
     axis.title   = element_text(face = "bold"),
     legend.position = "top"
@@ -163,7 +180,12 @@ p <- ggplot(plot_df, aes(x = Downstream_Model, y = Frequency, fill = CV_Task)) +
   ) +
   theme_classic(base_size = 14) +
   theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.text.x  = element_text(angle = 45, hjust = 1,size = 14),
+    axis.text.y  = element_text(size = 14),
+    axis.title.x = element_text(size = 14, face = "bold"),
+    axis.title.y = element_text(size = 14, face = "bold"),
+    legend.text  = element_text(size = 14),
+    
     panel.grid.minor = element_blank(),
     plot.title = element_text(hjust = 0.5, face = "bold"),
     axis.title = element_text(face = "bold")

@@ -43,6 +43,12 @@ p <- ggplot() +
   ) +
   theme_minimal(base_size = 14) +
   theme(
+    axis.text.x  = element_text(hjust = 1,size = 14),
+    axis.text.y  = element_text(size = 14),
+    axis.title.x = element_text(size = 14, face = "bold"),
+    axis.title.y = element_text(size = 14, face = "bold"),
+    legend.text  = element_text(size = 14),
+    
     plot.title = element_text(hjust = 0.5, face = "bold"),
     axis.title = element_text(face = "bold"),
     legend.position = "top"
@@ -101,6 +107,12 @@ p_bar <- ggplot(anno_counts, aes(x = Annotation_Software, y = n)) +
   ) +
   theme_classic(base_size = 14) +                            # match style
   theme(
+    axis.text.x  = element_text(hjust = 1,size = 14),
+    axis.text.y  = element_text(size = 14),
+    axis.title.x = element_text(size = 14, face = "bold"),
+    axis.title.y = element_text(size = 14, face = "bold"),
+    legend.text  = element_text(size = 14),
+    
     plot.title = element_text(hjust = 0.5, face = "bold"),
     axis.title = element_text(face = "bold"),
     plot.margin = margin(10, 40, 10, 10)                     # avoid label clipping
@@ -134,6 +146,9 @@ p_linear <- ggplot(df_counts, aes(x = n_labeled)) +
   coord_flip() +
   theme_classic(base_size = 14) +
   theme(
+    axis.text.y  = element_text(size = 14),
+    axis.title.y = element_text(size = 14, face = "bold"),
+
     plot.title = element_text(hjust = 0.5, face = "bold"),
     axis.title = element_text(face = "bold"),
     axis.text.x  = element_blank(),
@@ -202,6 +217,12 @@ p_rects_origin <- ggplot(rects) +
   labs(x = "Width (px)", y = "Height (px)") +
   theme_classic(base_size = 14) +
   theme(
+    axis.text.x  = element_text(hjust = 1,size = 14),
+    axis.text.y  = element_text(size = 14),
+    axis.title.x = element_text(size = 14, face = "bold"),
+    axis.title.y = element_text(size = 14, face = "bold"),
+    legend.text  = element_text(size = 14),
+    
     plot.title = element_text(hjust = 0.5, face = "bold"),
     axis.title = element_text(face = "bold"),
     panel.grid.minor = element_blank(),
@@ -258,6 +279,12 @@ p <- ggplot(summary_df, aes(x = Type, y = n, fill = Status)) +
   ) +
   theme_classic(base_size = 14) +
   theme(
+    axis.text.x  = element_text(hjust = 1,size = 14),
+    axis.text.y  = element_text(size = 14),
+    axis.title.x = element_text(size = 14, face = "bold"),
+    axis.title.y = element_text(size = 14, face = "bold"),
+    legend.text  = element_text(size = 14),
+    
     plot.title = element_text(hjust = 0.5, face = "bold"),
     axis.title = element_text(face = "bold"),
     legend.position = "top"
@@ -265,3 +292,4 @@ p <- ggplot(summary_df, aes(x = Type, y = n, fill = Status)) +
 print(p)
 ggsave(file.path(im_path,"dataset_code_both_availability_share.png"),
        plot = p, width = 8, height = 5.5, dpi = 300)
+

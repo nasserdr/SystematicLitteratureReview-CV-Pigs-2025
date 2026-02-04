@@ -45,9 +45,14 @@ plot_heatmap <- function(df_counts, row_var, col_var, row_order, col_order,
     labs(x = xlab, y = ylab, fill = "Count") +
     theme_classic(base_size = 14) +
     theme(
+      axis.text.x  = element_text(angle = x_angle, hjust = 1,size = 14),
+      axis.text.y  = element_text(size = 14),
+      axis.title.x = element_text(size = 14, face = "bold"),
+      axis.title.y = element_text(size = 14, face = "bold"),
+      legend.text  = element_text(size = 14),
+      
       plot.title = element_text(hjust = 0.5, face = "bold"),
       axis.title = element_text(face = "bold"),
-      axis.text.x = element_text(angle = x_angle, hjust = 1)
     )
   
   print(p)

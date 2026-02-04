@@ -13,6 +13,11 @@ p <- ggplot(df_critical, aes(x = `Total Score`, fill = Inclusion)) +
   ) +
   theme_classic(base_size = 14) +
   theme(
+    axis.text.x  = element_text(size = 14),
+    axis.text.y  = element_text(size = 14),
+    axis.title.x = element_text(size = 14, face = "bold"),
+    axis.title.y = element_text(size = 14, face = "bold"),
+    legend.text  = element_text(size = 14),
     plot.title = element_text(hjust = 0.5, face = "bold"),
     axis.title = element_text(face = "bold"),
     legend.position = "top"
@@ -51,6 +56,11 @@ p <- ggplot(journal_counts_filtered, aes(x = fct_reorder(Journal, n), y = n)) +
   labs(x = "Journals (appearing more than 3 times)", y = "Number of Papers") +
   theme_classic(base_size = 14) +
   theme(
+    axis.text.x  = element_text(size = 14),
+    axis.text.y  = element_text(size = 14),
+    axis.title.x = element_text(size = 14, face = "bold"),
+    axis.title.y = element_text(size = 14, face = "bold"),
+    legend.text  = element_text(size = 14),
     plot.title = element_text(hjust = 0.5, face = "bold"),
     axis.title = element_text(face = "bold"),
     plot.margin = margin(10, 45, 10, 10)                              # bigger right margin
@@ -115,6 +125,11 @@ p_topk <- ggplot(journal_counts_by_type, aes(x = Journal, y = n)) +
   ) +
   theme_classic(base_size = 14) +
   theme(
+    axis.text.x  = element_text(size = 14),
+    axis.text.y  = element_text(size = 14),
+    axis.title.x = element_text(size = 14, face = "bold"),
+    axis.title.y = element_text(size = 14, face = "bold"),
+    legend.text  = element_text(size = 14),
     plot.title = element_text(hjust = 0.5, face = "bold"),
     axis.title = element_text(face = "bold"),
     plot.margin = margin(10, 45, 10, 10)
@@ -164,6 +179,11 @@ p <- ggplot(author_counts_top, aes(x = Author, y = n)) +
   ) +
   theme_classic(base_size = 14) +
   theme(
+    axis.text.x  = element_text(size = 14),
+    axis.text.y  = element_text(size = 14),
+    axis.title.x = element_text(size = 14, face = "bold"),
+    axis.title.y = element_text(size = 14, face = "bold"),
+    legend.text  = element_text(size = 14),
     plot.title = element_text(hjust = 0.5, face = "bold"),
     axis.title = element_text(face = "bold"),
     plot.margin = margin(10, 30, 10, 10)                    # extra right margin
@@ -197,6 +217,12 @@ p <- ggplot(animal_counts,
   theme(legend.position = "none") + 
   theme_classic(base_size = 14) +
   theme(
+    axis.text.x  = element_text(size = 14),
+    axis.text.y  = element_text(size = 14),
+    axis.title.x = element_text(size = 14, face = "bold"),
+    axis.title.y = element_text(size = 14, face = "bold"),
+    legend.text  = element_text(size = 14),
+    
     plot.title = element_text(hjust = 0.5, face = "bold"),
     axis.title = element_text(face = "bold"),
     legend.position = "top"

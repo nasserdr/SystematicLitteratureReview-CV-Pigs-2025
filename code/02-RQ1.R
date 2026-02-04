@@ -36,8 +36,13 @@ count_and_plot <- function(data, col, title) {
     labs(x = "Number of Studies", y = NULL, title = title) +
     theme_classic(base_size = 13) +
     theme(
+      axis.text.x  = element_text(size = 14),
+      axis.title.x = element_text(size = 14, face = "bold"),
+      axis.title.y = element_text(size = 14, face = "bold"),
+      legend.text  = element_text(size = 14),
+      
       plot.title = element_text(face = "bold", hjust = 0.5),
-      axis.text.y = element_text(angle = 0, hjust = 1),
+      axis.text.y = element_text(size = 14, angle = 0, hjust = 1),
       plot.margin = margin(10, 20, 10, 10)
     )
 }
@@ -99,9 +104,14 @@ p_heat <- ggplot(bio_app_counts,
   labs(x = "Application", y = "Biomarker", fill = "Count") +
   theme_classic(base_size = 14) +
   theme(
+    axis.text.x  = element_text(angle = 35, hjust = 1,size = 14),
+    axis.text.y  = element_text(size = 14),
+    axis.title.x = element_text(size = 14, face = "bold"),
+    axis.title.y = element_text(size = 14, face = "bold"),
+    legend.text  = element_text(size = 14),
+    
     plot.title = element_text(hjust = 0.5, face = "bold"),
     axis.title = element_text(face = "bold"),
-    axis.text.x = element_text(angle = 35, hjust = 1)
   )
 print(p_heat)
 ggsave(file.path(im_path,"biomarker_vs_application_heatmap.png"),

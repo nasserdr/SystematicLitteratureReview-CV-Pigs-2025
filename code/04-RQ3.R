@@ -50,10 +50,14 @@ p <- ggplot(metrics_long, aes(x = value, y = Metric)) +
   coord_flip() +
   theme_classic(base_size = 14) +
   theme(
-    plot.title = element_text(hjust = 0.5, face = "bold"),
-    axis.title.x = element_text(face = "bold"),
-    axis.text.x = element_text(angle = 35, hjust = 1)
+    axis.text.x  = element_text(angle = 35, hjust = 1,size = 14),
+    axis.text.y  = element_text(size = 14),
+    axis.title.x = element_text(size = 14, face = "bold"),
+    axis.title.y = element_text(size = 14, face = "bold"),
+    legend.text  = element_text(size = 14),
     
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+
   )
 
 p
@@ -98,8 +102,13 @@ p_usage <- ggplot(metric_usage, aes(x = fct_reorder(Metric, Count), y = Count)) 
   ) +
   theme_classic(base_size = 14) +                                  # match earlier plots
   theme(
+    axis.text.x  = element_text(hjust = 1,size = 14),
+    axis.text.y  = element_text(size = 14),
+    axis.title.x = element_text(size = 14, face = "bold"),
+    axis.title.y = element_text(size = 14, face = "bold"),
+    legend.text  = element_text(size = 14),
+    
     plot.title = element_text(hjust = 0.5, face = "bold"),
-    axis.title.y = element_text(face = "bold"),
     plot.margin = margin(10, 40, 10, 10)                           # avoid clipping on save
   )
 
