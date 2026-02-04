@@ -118,7 +118,7 @@ Image classification assigns a single label to an entire image or image sequence
 \begin{figure*}
     \centering
     % Example schematic CV tasks overview
-    \includegraphics[width=\textwidth]{fig/cv_examples_classification}
+    \includegraphics[width=\textwidth]{figures_produced_by_authors/cv_examples_classification}
     \caption{Examples of classification of different piglet postures. a) lateral lying; b) ventral lying; c) other postures - Reproduced from \citep{Chen2025Agriculture_PPRYOLO}.}
     \label{fig:cv_task_classification}
 \end{figure*}
@@ -136,7 +136,7 @@ Pose estimation focuses on detecting anatomical keypoints and inferring the skel
 \begin{figure*}
     \centering
     % Example schematic CV tasks overview
-    \includegraphics[width=\textwidth]{fig/cv_examples_detection}
+    \includegraphics[width=\textwidth]{figures_produced_by_authors/cv_examples_detection}
     \caption{An example of (a) Object detection with bounding boxes; b) object detection with oriented bounding boxes; c) semantic segmentation and d) Keypoints detection.}
     \label{fig:cv_task_det_seg_pose}
 \end{figure*}
@@ -151,7 +151,7 @@ Action and behavior recognition extends classification to the temporal domain by
 \begin{figure*}
     \centering
     % Example schematic CV tasks overview
-    \includegraphics[width=\textwidth]{fig/cv_examples_action}
+    \includegraphics[width=\textwidth]{figures_produced_by_authors/cv_examples_action}
     \caption{An example illustrating a sequence of pictures used for behavior recognition using CNN and LSTM. Reproduced from \citep{Chen2020CEA_Aggression}.}
     \label{fig:cv_task_action}
 \end{figure*}
@@ -164,7 +164,7 @@ Action and behavior recognition extends classification to the temporal domain by
 % \begin{figure*}
 %     \centering
 %     % Example schematic CV tasks overview
-%     \includegraphics[width=\textwidth]{fig/cv_examples_anomaly_detection}
+%     \includegraphics[width=\textwidth]{figures_produced_by_code/cv_examples_anomaly_detection}
 %     \caption{Lendmark detection - measuring hock and knee angles using YOLO. Reproduced from \citep{Jeon2024TranslAnimalSci} \fix{I actually would remove this because this is nothing but a downstream task of the keypoints. Needs a better caption + add the reference from where it has been reproduced - FIXED}}
 %     \label{fig:cv_task_anomaly}
 % \end{figure*}
@@ -233,7 +233,7 @@ The initial search yielded a large number of irrelevant publications. To refine 
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\textwidth]{fig/prisma_diagram.png}
+    \includegraphics[width=\textwidth]{figures_produced_by_authors/prisma_diagram}
     \caption{PRISMA flow diagram illustrating the study selection process for the systematic literature review on computer vision applications in pig production \fix{Add more comprehensive captions + export picture from power point with high resolution - FIXED caption and quality, but i would reduce size (also i left original so you can see the difference)}}
     \label{fig:prisma_diagram}
 \end{figure*}
@@ -284,7 +284,7 @@ Each of these criteria were checked to rate the articles. Per criteria met, half
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\textwidth]{fig/critical_appraisal_distribution}
+    \includegraphics[width=\textwidth]{figures_produced_by_code/critical_appraisal_distribution.tiff}
     \caption{The distribution of critical appraisal scores. The red dotted line shows the cutoff score for inclusion in the next stage; orange bars reflect papers scoring less than 8, and blue bars those scoring 8 or higher.}
     \label{fig:critical_appraisal}
 \end{figure*}
@@ -315,7 +315,7 @@ Figure~\ref{fig:journals_gt3} summarizes the journals that published at least th
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\textwidth]{fig/journal_distribution_gt3}
+    \includegraphics[width=\textwidth]{figures_produced_by_code/journal_distribution_gt3}
     \caption{Distribution of papers published per journal (only journals with at least three included papers are shown).}
     \label{fig:journals_gt3}
 \end{figure*}
@@ -324,7 +324,7 @@ Figure~\ref{fig:author_distribution} depicts the distribution of publications by
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\textwidth]{fig/author_appearances_top25}
+    \includegraphics[width=\textwidth]{figures_produced_by_code/author_appearances_top25}
     \caption{Distribution of the papers included in the study by the most active authors (top 25).}
     \label{fig:author_distribution}
 \end{figure*}
@@ -334,7 +334,7 @@ The distribution of pig categories across the selected studies is shown in Figur
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\textwidth]{fig/animal_distribution}
+    \includegraphics[width=\textwidth]{figures_produced_by_code/animal_distribution}
     \caption{Distribution of papers by pig category (e.g., adult pigs, sows, piglets).}
     \label{fig:animal_distribution}
 \end{figure*}
@@ -361,7 +361,7 @@ To address RQ1, we identified primary biomarkers, defined as visual observables 
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\textwidth]{fig/biomarker_vs_application_heatmap}
+    \includegraphics[width=\textwidth]{figures_produced_by_code/biomarker_vs_application_heatmap}
     \caption{The heatmap of Biomarkers Vs Applications. On the x-axis, 8 applications are shown and on the y-axis 19 biomarkers are shown. The intensity of the color reflects the number of times these tuples appeared after the screening. The highest tuple goes to the application of Welfare using the Behavior Recognition as a Biomarker, followed by the activity monitoring using the detection and tacking technologies. Some other tuples do not exist, either because they are not possible or because they have not been explored yet. For example, Health Status never appeared using Detection or Tracking as Biomarker.}
     \label{fig:biomarker_heatmap}
 \end{figure*}
@@ -376,10 +376,9 @@ Individual identification typically relies on CNN-based classification, using pi
 More recent PLF systems are incorporating vision transformers (ViT) and multimodal transformer-based architectures, which improve spatial–temporal reasoning and robustness across lighting and viewpoints \citep{Taiwo2025SmartAgTech_ViTInteractions}.
 Across the dataset, object detection was the most widely used CV task, followed by classification and segmentation (Figure 11). These task-level trends align with the application needs of PLF, where identifying individuals, tracking movements, and recognizing behaviors are central requirements.
 
-
 \begin{figure*}
     \centering
-    \includegraphics[width=\textwidth]{fig/cv_tasks_distribution}
+    \includegraphics[width=\textwidth]{figures_produced_by_code/cv_tasks_distribution}
     \caption{Distribution of computer vision task types (e.g., detection, classification, segmentation) across the selected studies.}
     \label{fig:cv_tasks_distribution}
 \end{figure*}
@@ -394,7 +393,7 @@ These architectures accounted for the majority of adopted models across studies.
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\textwidth]{fig/models_family_distribution}
+    \includegraphics[width=\textwidth]{figures_produced_by_code/models_family_distribution}
     \caption{Distribution of model families (e.g., YOLO, Faster R-CNN, ResNet, VGG) used in pig-focused PLF studies.}
     \label{fig:model_families}
 \end{figure*}
@@ -403,7 +402,7 @@ Furthermore, a subset of studies applied additional machine learning models as d
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\textwidth]{fig/downstream_cvtask_stacked_bar}
+    \includegraphics[width=\textwidth]{figures_produced_by_code/downstream_cvtask_stacked_bar}
     \caption{Distribution of downstream models (e.g., LSTM, transformers) by CV task type.}
     \label{fig:downstream_models}
 \end{figure*}
@@ -412,7 +411,7 @@ The use of transformer-based models remains relatively limited. As illustrated i
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\textwidth]{fig/cnn_vs_transformer_share_by_year}
+    \includegraphics[width=\textwidth]{figures_produced_by_code/cnn_vs_transformer_share_by_year}
     \caption{Share of CNN-based versus transformer-based architectures over time.}
     \label{fig:cnn_vs_transformer}
 \end{figure*}
@@ -429,7 +428,7 @@ The most frequently used metrics were Precision, Accuracy, and Recall, as shown 
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\textwidth]{fig/metric_usage_barplot}
+    \includegraphics[width=\textwidth]{figures_produced_by_code/metric_usage_barplot}
     \caption{Distribution of performance metrics (e.g., precision, recall, accuracy, F1) across the selected studies.}
     \label{fig:metric_usage}
 \end{figure*}
@@ -438,7 +437,7 @@ Figure  ~\ref{fig:metric_ranges} illustrates the typical ranges of these metrics
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\textwidth]{fig/performance_metrics_boxplots_sorted_by_range}
+    \includegraphics[width=\textwidth]{figures_produced_by_code/performance_metrics_boxplots_sorted_by_range}
     \caption{Boxplots of reported performance metrics, sorted by range, illustrating typical performance intervals across studies.}
     \label{fig:metric_ranges}
 \end{figure*}
@@ -461,7 +460,7 @@ These findings highlight the need for models capable of handling uncontrolled fa
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\textwidth]{fig/challenges_distribution}
+    \includegraphics[width=\textwidth]{figures_produced_by_code/challenges_distribution}
     \caption{Distribution of reported challenges in CV-based pig identification, detection, behavior, and health monitoring.}
     \label{fig:challenges}
 \end{figure*}
@@ -475,7 +474,7 @@ Posture-related behaviors—such as lying, sitting, and standing—were the most
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\textwidth]{fig/behavior_full_figure}
+    \includegraphics[width=\textwidth]{figures_produced_by_code/behavior_full_figure}
     \caption{Distribution of behaviors (e.g., postural, feeding, aggressive) and associated methods and applications across the reviewed studies. \fix{HASSAN: optimize the plot.}}
     \label{fig:behavior_distribution}
 \end{figure*}
@@ -484,7 +483,7 @@ Figure  ~\ref{fig:behavior_application_alluvial} further maps the behavior categ
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\textwidth]{fig/alluvial_behavior_to_application}
+    \includegraphics[width=\textwidth]{figures_produced_by_code/alluvial_behavior_to_application}
     \caption{Alluvial diagram mapping behavior categories to their application domains in PLF for pigs. \fix{HASSAN: Optimize the plot.}}
     \label{fig:behavior_application_alluvial}
 \end{figure*}
@@ -527,7 +526,7 @@ Figure \ref{fig:methods_vs_application_year} displays the yearly distribution of
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\textwidth]{fig/methods_vs_applications_per_year}
+    \includegraphics[width=\textwidth]{figures_produced_by_code/methods_vs_applications_per_year}
     \caption{Yearly distribution of method-focused versus application-focused studies.}
     \label{fig:methods_vs_application_year}
 \end{figure*}
@@ -536,7 +535,7 @@ Figure \ref{fig:journal_type_comparison} further compares these categories acros
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\textwidth]{fig/journal_distribution_top3_by_type}
+    \includegraphics[width=\textwidth]{figures_produced_by_code/journal_distribution_top3_by_type}
     \caption{Comparison of method- versus application-focused papers across the top three journals. \fix{HASSAN: Optimize the plot}}
     \label{fig:journal_type_comparison}
 \end{figure*}
@@ -545,7 +544,7 @@ Annotation is a critical step in training supervised CV models. Figure ~\ref{fig
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\textwidth]{fig/annotation_software_hist}
+    \includegraphics[width=\textwidth]{figures_produced_by_code/annotation_software_hist}
     \caption{Distribution of annotation software used in the reviewed studies.}
     \label{fig:annotation_software}
 \end{figure*}
@@ -556,7 +555,7 @@ Approximately 5.2\% shared code only, and 7.5\% made datasets publicly available
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\textwidth]{fig/dataset_code_both_availability_share}
+    \includegraphics[width=\textwidth]{figures_produced_by_code/dataset_code_both_availability_share.tiff}
     \caption{Share of studies offering public datasets, code, both, or neither.}
     \label{fig:dataset_code_availability}
 \end{figure*}
@@ -565,7 +564,7 @@ Further, the sizes of image resolutions were analyzed. The Figure \ref{fig:image
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\textwidth]{fig/image_resolutions_rectangles_centered}
+    \includegraphics[width=\textwidth]{figures_produced_by_code/image_resolutions_rectangles_centered.tiff}
     \caption{Distribution of the top used image resolutions across studies.}
     \label{fig:image_resolutions_top}
 \end{figure*}
@@ -574,7 +573,7 @@ Figure \ref{fig:num_labeled_images} overlays the full distribution of image size
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\textwidth]{fig/num_labeled_images_hist_linear}
+    \includegraphics[width=\textwidth]{figures_produced_by_code/num_labeled_images_hist_linear}
     \caption{Distribution of the number of labeled images used per study (excluding video-frame outliers).}
     \label{fig:num_labeled_images}
 \end{figure*}
