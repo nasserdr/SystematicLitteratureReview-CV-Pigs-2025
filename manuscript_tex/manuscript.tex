@@ -1,0 +1,633 @@
+%% 
+%% Deep-learning based computer vision in precision livestock farming for pigs
+%% Systematic review manuscript in Elsevier cas-dc format
+%% 
+
+\documentclass[a4paper,fleqn]{cas-dc}
+
+\usepackage[numbers]{natbib}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{orcidlink}
+
+%%%Author definitions
+\def\tsc#1{\textsc{\lowercase{#1}}}
+%%%
+
+\usepackage{xcolor}
+
+\newif\iffixnotes
+\fixnotestrue
+% \fixnotesfalse
+
+\newcommand{\fix}[1]{%
+  \iffixnotes
+    {\color{red}\textbf{FIX THIS (#1)}}%
+  \fi
+}
+
+
+\begin{document}
+\let\WriteBookmarks\relax
+\def\floatpagepagefraction{1}
+\def\textpagefraction{.001}
+
+\shorttitle{DL-based computer vision in PLF for pigs}
+\shortauthors{Nasser et~al.}
+
+\title[mode=title]{Deep-learning based computer vision in precision livestock farming for pigs: systematic review and promising future research directions}
+
+\author[1]{Hassan-Roland Nasser\,\orcidlink{0000-0003-1821-3234}}
+\cormark[1]
+\ead{hassan-roland.nasser@agroscope.admin.ch}
+
+\author[2]{Vladimir Živković\,\orcidlink{0000-0001-8938-4677}}
+\author[3]{Claudia Kasper\,-Völkl\,\orcidlink{0000-0001-7305-3996}}
+
+\affiliation[1]{organization={Digital Production Group, Agroscope},
+                city={Ettenhausen},
+                country={Switzerland}, 
+                }
+
+\affiliation[2]{organization={Department of Pig Breeding, Research and Development, Institute for Animal Husbandry},
+                city={Belgrade},
+                country={Serbia},
+                }
+
+\affiliation[3]{organization={Animal GenoPhenomics Group, Agroscope},
+                city={Posieux},
+                country={Switzerland}}
+
+\cortext[cor1]{Corresponding author.}
+
+\begin{abstract}
+The pressing challenges in pig production, including welfare monitoring, behavior analysis, and health management, have triggered a growing interest in the use of computer vision as a foundation for automated and scalable solutions. Within the field of precision livestock farming, computer vision has enabled a wide range of applications in pig farming such as behavioral assessment, weight estimation, individual tracking, posture recognition and health status evaluation. However, the existing literature is highly fragmented, with diverse methodologies, datasets, and software tools across studies. This review paper presents a threefold contribution. First, it offers an accessible primer on computer vision, intended both as an educational material for researchers with limited background in computer vision and to establish the technical context for subsequent discussions. Second, it provides a comprehensive systematic review of computer vision applications in pig farming, synthesizing current technologies and methodological approaches. Third, the paper analyzes existing gaps in the literature, proposing key directions for future research and technological development in this evolving field.
+\end{abstract}
+
+\begin{keywords}
+Computer vision \sep Deep learning \sep Precision livestock farming \sep Pigs
+\end{keywords}
+
+\maketitle
+
+% ----------------------------------------------------------------------
+\section{Introduction}
+% ----------------------------------------------------------------------
+
+Recent advances in artificial intelligence (AI), particularly in deep learning (DL; \citep{LeCun2015Nature,Bengio2021CACM}), have fundamentally reshaped the fields of computer vision (CV) and pattern recognition. Modern DL-driven vision systems can now automate tasks once reliant on human observation, enabling continuous monitoring across agricultural production environments. By supporting data-driven decision-making and targeted interventions, these technologies contribute to a more efficient and environmentally sustainable digital agriculture \citep{Lu2020CEA}.
+
+The adoption of CV techniques accelerated significantly following breakthroughs in convolutional neural networks (CNNs) during the early 2010s. These developments enabled unprecedented improvements in automated image analysis, driving rapid expansion of applications across domains including agriculture and animal husbandry \citep{Nasirahmadi2017AABS,Okinda2020AIA,BorgesOliveira2021LivestockSci}. Precision livestock farming (PLF), particularly in pig production, has benefited from this technological shift. DL integrated with CV allows for automated behavioral monitoring, welfare assessment, detection tasks, and environmental surveillance, reducing the need for labor-intensive manual observations and aligning with increasing society and regulatory expectations around animal welfare \citep{Marchegiani2025SmartAgTech}.
+
+Over the past decade, extensive research has examined the use of CV for high-throughput phenotyping, behavior tracking, and welfare assessment in farm animals \citep{Okinda2020AIA,Wurtz2019PLoSOne,Li2022CEA_Barriers}. A wide range of imaging modalities has been explored, with RGB and RGB-D sensors being most prevalent. Notably, affordable consumer-grade depth sensors have facilitated 3D CV applications, including biometric measurements such as weight estimation \citep{Wang2023CEA_3D}.
+
+Several systematic reviews have previously addressed different aspects of CV and DL applications in livestock. For example, \citet{Rohan2024CEA_BehaviourReview} reviewed deep-learning approaches for behavior recognition, while \citet{Scott2024ArxivOutdoor} analyzed vision-based monitoring techniques for outdoor livestock. Other reviews have emphasized public dataset availability \citep{Bhujel2025CEA_PLFdatasets}, focused on body-weight estimation \citep{Dohmen2022NZJAR} or examined broader machine-learning applications in livestock. However, despite this growing body of work, none has specifically and comprehensively addressed deep-learning based computer vision methods within the context of PLF for pigs—a notable gap given the economic importance of pig production and its unique behavioral and management challenges.
+
+To address this gap, the present review provides a systematic and in-depth synthesis of DL-based CV applications in pig production. It aims to map the current situation, evaluate methodological trends, and identify areas where further development is needed. The review is structured around four research questions and complements the synthesis with a primer on core computer-vision concepts to support readers from both animal science and engineering backgrounds.
+
+% ----------------------------------------------------------------------
+\section{A primer on computer vision for livestock farming}
+% ----------------------------------------------------------------------
+
+The objective of this section is twofold. First, it serves as an accessible introduction to computer vision (CV) concepts for researchers who may not have a technical background in the field but are interested in understanding its potential applications in precision livestock farming (PLF) for pigs. Second, it delineates the specific subfields of computer vision that are most relevant to this review, helping to clarify the scope and focus given the breadth of the CV domain.
+
+Computer vision, broadly defined, encompasses a spectrum of computational techniques aimed at enabling machines to interpret and extract information from visual inputs. For the purposes of this review, we structure the domain into four principal areas, each representing a step forward in technical sophistication and automation capabilities:
+
+\begin{enumerate}
+\item \textbf{Image processing}: This foundational area involves the application of algorithmic operations to enhance, transform, or extract information from images. Outputs may include noise-reduced, segmented, or binarized versions of the original image. These processed images can be directly used or serve as inputs to subsequent machine learning algorithms. For example, background subtraction may be employed to isolate animals from their environment for later analysis.
+
+\item \textbf{Traditional computer vision}: This category includes classical techniques such as feature extraction, edge detection, and object tracking based on handcrafted descriptors (e.g., SIFT, HOG). These methods are often used for tasks like motion analysis or shape recognition and require domain-specific tuning.
+
+\item \textbf{Deep learning-based computer vision}: Deep learning, particularly through convolutional neural networks (CNNs), has revolutionized feature extraction by enabling automatic learning of hierarchical representations from raw image data. These architectures—often referred to as backbones—are typically integrated into task-specific frameworks to perform downstream tasks such as object detection, semantic segmentation, pose estimation, or classification. More recently, transformer-based architectures have been explored for their ability to model long-range dependencies in visual data. This review is focused on this area of computer vision.
+
+\item \textbf{Vision-language models (VLMs)}: Representing the cutting edge of AI research, large vision-language models integrate visual and textual data within a unified framework. These models, such as CLIP or Flamingo, can generalize across a wide range of vision tasks and are increasingly being explored for zero-shot or few-shot learning scenarios in agriculture and animal science. Although still emerging in livestock applications, they hold substantial promise for multimodal understanding, e.g., combining image data with textual health records or environmental logs.
+\end{enumerate}
+
+By organizing the field in this way, we clarify the technological underpinnings of the works included in our review. Understanding these distinctions is essential for interpreting the methodological choices made in the literature and for identifying opportunities where advanced techniques may offer improved performance or scalability in PLF contexts.
+
+Specifically, deep learning has become the cornerstone of modern computer vision, largely due to its ability to automatically extract, learn, and refine hierarchical features from raw visual inputs. At the heart of most deep learning models for vision tasks are convolutional neural networks (CNNs), which apply spatially localized filters across input images to capture low- to high-level features—such as edges, textures, shapes, and complex patterns. These CNN-based structures, commonly referred to as backbones, serve as the foundational modules upon which more complex vision tasks are built.
+
+Typical backbones include architectures like VGGNet, ResNet, EfficientNet, and DenseNet, many of which are pretrained on large-scale datasets (e.g., ImageNet) and later fine-tuned for specific tasks in agriculture or animal behavior. More recently, vision transformers (ViTs) and hybrid models have gained traction due to their capacity to capture long-range dependencies and context within images, which is particularly useful for crowded or complex environments such as pig pens.
+
+These backbones are usually coupled with task-specific modules, enabling what is known as downstream tasks, such as:
+
+\begin{itemize}
+\item \textbf{Classification} (Figure~\ref{fig:cv_task_classification}):
+Image classification assigns a single label to an entire image or image sequence without explicit object localization. In livestock monitoring, classification is commonly used to recognize animal postures, activities, or health states from visual data. Typical applications include posture recognition (e.g., lateral or ventral lying), behavior categorization, and early disease detection. CNN-based architectures such as ResNet, VGG, EfficientNet, as well as 3D CNNs for short video clips, are commonly used for this task.
+
+\begin{figure*}
+    \centering
+    % Example schematic CV tasks overview
+    \includegraphics[width=\textwidth]{fig/cv_examples_classification}
+    \caption{Examples of classification of different piglet postures. a) lateral lying; b) ventral lying; c) other postures - Reproduced from \citep{Chen2025Agriculture_PPRYOLO}.}
+    \label{fig:cv_task_classification}
+\end{figure*}
+
+
+\item \textbf{Object Detection} (Figure~\ref{fig:cv_task_det_seg_pose}, a,b):
+Object detection refers to the task of simultaneously localizing and classifying objects of interest within an image, typically by predicting bounding boxes and associated class labels. In livestock monitoring, object detection is commonly used to identify individual animals, detect specific body parts, or localize discrete events within a scene. For example, detection models have been applied to count animals in pens, localize pigs in crowded environments, or detect interactions between individuals. Widely used architectures include two-stage detectors such as Faster R-CNN, as well as one-stage detectors like YOLO (You Only Look Once) and SSD (Single Shot MultiBox Detector). More recently, transformer-based architectures, including DETR and variants such as RF-DETR, have gained increasing attention due to their end-to-end training formulation and improved handling of complex scenes.
+
+\item \textbf{Semantic and Instance Segmentation} (Figure~\ref{fig:cv_task_det_seg_pose}, c):
+Segmentation aims to assign a semantic label to each pixel in an image (semantic segmentation) or to additionally distinguish between individual object instances (instance segmentation). In animal monitoring applications, segmentation is used to delineate animals from the background or to segment specific body regions such as the head or torso. These pixel-level representations are particularly important for analyzing postures, locomotion patterns, and spatial distribution within a pen. For instance, U-Net models have been applied to thermal images to segment pigs for heat stress analysis, enabling improved welfare assessment under varying environmental conditions. Commonly used architectures include U-Net, DeepLabV3+, and Mask R-CNN, which combines instance segmentation with object detection.
+
+\item \textbf{Pose Estimation} (Figure~\ref{fig:cv_task_det_seg_pose}, d):
+Pose estimation focuses on detecting anatomical keypoints and inferring the skeletal structure of an object, enabling a fine-grained description of body configuration and movement. In the context of livestock analysis, pose estimation has been used to monitor locomotion, identify signs of lameness, or track recovery after injury or surgery. By analyzing temporal sequences of estimated keypoints, behaviors such as lying, standing, or walking patterns can be quantified automatically. State-of-the-art pose estimation frameworks include OpenPose, DeepLabCut, and HRNet, which have been successfully adapted to animal pose estimation tasks.
+
+\begin{figure*}
+    \centering
+    % Example schematic CV tasks overview
+    \includegraphics[width=\textwidth]{fig/cv_examples_detection}
+    \caption{An example of (a) Object detection with bounding boxes; b) object detection with oriented bounding boxes; c) semantic segmentation and d) Keypoints detection.}
+    \label{fig:cv_task_det_seg_pose}
+\end{figure*}
+
+
+
+\noindent
+\item \textbf{Action and Behavior Recognition} (Figure~\ref{fig:cv_task_action}):
+Action and behavior recognition extends classification to the temporal domain by modeling motion and temporal dependencies across video sequences. The objective is to recognize complex behaviors that unfold over time, such as social interactions, aggression, or farrowing events. In livestock monitoring, these methods enable continuous and automated assessment of animal welfare and social dynamics. For instance, one study combined 3D CNNs with a temporal attention mechanism to detect aggressive interactions in group-housed pigs, achieving high precision in distinguishing between play and conflict behaviors \citep{Chen2020CEA_Aggression}. Common architectures for action recognition include 3D CNNs, ConvLSTM networks, and more recently, Transformer-based temporal models.
+
+\end{itemize}
+\begin{figure*}
+    \centering
+    % Example schematic CV tasks overview
+    \includegraphics[width=\textwidth]{fig/cv_examples_action}
+    \caption{An example illustrating a sequence of pictures used for behavior recognition using CNN and LSTM. Reproduced from \citep{Chen2020CEA_Aggression}.}
+    \label{fig:cv_task_action}
+\end{figure*}
+
+
+
+% \noindent
+% \textbf{Anomaly and Health Event Detection} (Figure 4): Unsupervised or weakly supervised models, including autoencoders and GANs (Generative Adversarial Networks), are used to identify deviations from normal behavior or appearance, signaling potential health issues. This is particularly useful when annotated data is limited. For example, a study used an autoencoder to model normal daily movement patterns, flagging sudden changes as potential injury or illness \citep{Jeon2024TranslAnimalSci}.
+
+% \begin{figure*}
+%     \centering
+%     % Example schematic CV tasks overview
+%     \includegraphics[width=\textwidth]{fig/cv_examples_anomaly_detection}
+%     \caption{Lendmark detection - measuring hock and knee angles using YOLO. Reproduced from \citep{Jeon2024TranslAnimalSci} \fix{I actually would remove this because this is nothing but a downstream task of the keypoints. Needs a better caption + add the reference from where it has been reproduced - FIXED}}
+%     \label{fig:cv_task_anomaly}
+% \end{figure*}
+
+
+
+These examples highlight the versatility and power of deep learning-based computer vision in tackling various challenges in precision pig farming. By automatically processing vast amounts of visual data, these models not only improve the accuracy and scalability of welfare and behavior monitoring but also reduce the labor burden associated with manual observation.
+
+While significant advances have been made, the field still faces several open challenges, such as occlusions in group settings, ensuring model generalization across farms or breeds, managing variability in lighting and camera angles, and addressing the limited availability of labeled datasets. Nevertheless, the increasing availability of open-source frameworks (e.g., PyTorch, TensorFlow), pretrained models, and community-shared datasets is rapidly accelerating progress in this area.
+
+This review focuses specifically on these deep learning-based approaches and their application in pig farming, as they currently represent the most promising and scalable direction for computer vision in precision livestock farming.
+
+% ----------------------------------------------------------------------
+\section{Methodology}
+% ----------------------------------------------------------------------
+
+\subsection{Review protocol}
+
+This systematic review followed the PRISMA 2020 guidelines \citep{Page2021BMJ_PRISMA2020} to ensure transparency, reproducibility, and methodological rigor. The review protocol consisted of four structured steps designed to identify, select, appraise, and synthesize relevant studies on this topic.
+
+\textbf{Step 1: Planning the review.}
+The planning phase established the rationale for the review, defined the research questions, and outlined the search strategy. This process included identifying appropriate scientific databases, constructing search strings capable of capturing the relevant literature, and formulating explicit inclusion and exclusion criteria. These preparatory steps ensured that the review proceeded in a structured, consistent, and objective manner.
+
+\textbf{Step 2: Executing the review.}
+During execution, the search strings were applied to titles, abstracts, and keyword fields within the selected databases. All retrieved articles were screened against the predefined criteria. Publications meeting the eligibility conditions were shortlisted for full-text assessment. To ensure comprehensive coverage, we examined references within these shortlisted articles as well as papers citing them.
+
+\textbf{Step 3: Quality assessment and data synthesis.}
+The third step focused on the critical appraisal of the studies using quality assessment criteria. This filtering process ensured that only high-quality publications were considered as primary studies. Data extraction was performed systematically using a structured spreadsheet in which each study was entered as a row, with fields corresponding to the research questions (Supplementary data). Extracted information included study objectives, PLF problem categories, datasets, CV models and architectures, evaluation methods, publication metadata, and reported challenges.
+
+\textbf{Step 4: Reporting the findings.}
+Findings were organized around the four research questions. Results were summarized through narrative synthesis, complemented by figures and tables that visualize model usage, dataset properties, application areas, evaluation metrics, and other key insights derived from the 131 chosen studies.
+
+\subsection{Research questions}
+
+Four research questions (RQs) were formulated to guide data extraction and synthesis:
+
+\begin{itemize}
+\item RQ.1: What are the problems solved using CV for PLF in pig production?
+\item RQ.2: What are the CV models and networks used for PLF in pig production?
+\item RQ.3: What are the evaluation parameters and approaches used for CV models for PLF in pig production?
+\item RQ.4: What are the challenges associated with the CV-based pig identification, detection, behavior and health monitoring?
+\end{itemize}
+
+\subsection{Databases and search strategy}
+
+The following three widely recognized databases were selected for this study: ScienceDirect, Scopus, and Web of Science. The initial search process began with the formulation of keyword-based search strings. At the outset, the keywords ``pig'' OR ``sow'' OR ``weaner'' OR ``piglet'' OR ``fattenn*'' were used to retrieve all relevant studies. However, the results included studies unrelated to the focus area, such as those pertaining to human research. To refine the search and ensure a focus on computer vision applications, additional keywords such as ``computer vision'' OR ``machine vision'' were incorporated.
+
+A simplified search strategy was deliberately employed by avoiding overly specific terms. For instance, words such as ``action'' and ``activity'' (related to ``behaviour''), ``artificial intelligence'' (related to ``deep learning''), and ``analysis,'' ``detection,'' and ``classification'' (related to ``recognition'') were not explicitly included in the search strings. This approach allowed for a broader retrieval of relevant studies, even when such terms were absent from the metadata of the selected databases.
+
+\noindent
+The following database-specific search queries were used:
+
+\begin{itemize}
+\item \textbf{Scopus:} \texttt{TITLE-ABS-KEY(("pig" OR "sow" OR "weaner" OR "piglet" OR "fattenn*" OR "swine") AND ("computer vision" OR "machine vision"))}
+
+\item \textbf{ScienceDirect:} \texttt{Title, Abstract, Keywords: (("pig" OR "sow" OR "weaner" OR "piglet" OR "fattenn*" OR "swine") AND ("computer vision" OR "machine vision"))}
+
+\item \textbf{Web of Science:} \texttt{ALL=(("pig" OR "sow" OR "weaner" OR "piglet" OR "fattenn*" OR "swine") AND ("computer vision" OR "machine vision"))}
+\end{itemize}
+
+
+
+\subsection{Selection criteria}
+
+The initial search yielded a large number of irrelevant publications. To refine the selection and ensure alignment with the research objectives, inclusion and exclusion criteria were established to identify publications relevant to the research questions \citep{Kitchenham2012EAST}. Each publication was systematically evaluated against these criteria. A publication was selected if all exclusion criteria were false and all inclusion criteria were true.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{fig/prisma_diagram.png}
+    \caption{PRISMA flow diagram illustrating the study selection process for the systematic literature review on computer vision applications in pig production \fix{Add more comprehensive captions + export picture from power point with high resolution - FIXED caption and quality, but i would reduce size (also i left original so you can see the difference)}}
+    \label{fig:prisma_diagram}
+\end{figure*}
+
+
+Following the database queries, 1068 studies were initially retrieved. After removing duplicates, 674 papers were selected for metadata screening. At this stage, publications were excluded if:
+
+\begin{itemize}
+\item The publication was not related to pigs or did not employ deep learning computer or machine vision techniques.
+\item The publication was not written in English.
+\item The full text was unavailable.
+\item The publication was a book chapter, conference abstract, data article, mini-review, short communication, thesis, review, or survey article.
+\item The publication abstract was missing.
+\item The publication was a preprint or had not undergone peer review.
+\item The publication was published before 2015.
+\end{itemize}
+
+
+After applying these criteria, 162 articles were advanced to full-text evaluation using the CASP-based checklist \citep{Moult2019ProteinsCASP}. All titles and abstracts of the retrieved records were then screened by V. Zivkovic and H-R. Nasser. The full texts of the remaining records were independently screened and discussed by V. Zivkovic and H-R. Nasser. To find further articles covering the topic, V. Zivkovic screened the reference list of the shortlisted articles and the articles that cited the shortlisted articles. The results were again discussed and selected by two reviewers (V. Zivkovic and H-R. Nasser). Finally, the data were extracted by V. Zivkovic.
+
+\subsection{Critical appraisal }
+The critical assessment relied on ten criteria that included relevance, model clarity, application specificity, study design transparency, data set detail, evaluation quality, reproducibility, presentation of the results, discussion of limitations, and contribution to research gaps (Table~\ref{tab:critical_appraisal}). 
+
+\begin{table*}[htbp]
+\centering
+\caption{Critical appraisal criteria and scoring framework used for quality assessment of the included studies. Each criterion was scored on a binary or partial basis, with a maximum total score of 10 points.}
+\label{tab:critical_appraisal}
+\begin{tabularx}{\textwidth}{c l X c}
+\hline
+\textbf{No.} & \textbf{Criterion} & \textbf{Description} & \textbf{Max score} \\
+\hline
+1 & Relevance to review scope & Focus on pigs and use of computer vision techniques & 1 (0.5 + 0.5) \\
+2 & Computer vision pipeline clarity & CV task clearly defined and model or preprocessing steps explained & 1 (0.5 + 0.5) \\
+3 & Application area defined & Application area clearly linked to pig welfare or productivity & 1 \\
+4 & Study design transparency & Experimental setup described and rationale provided & 1 (0.5 + 0.5) \\
+5 & Evaluation quality & Performance metrics reported and CV-relevant evaluation methods used & 1 (0.5 + 0.5) \\
+6 & Dataset description & Sufficient details on dataset characteristics and annotations provided & 1 (0.5 + 0.5) \\
+7 & Reproducibility (code/software) & Source code shared or software tools clearly stated & 1 (0.5 + 0.5) \\
+8 & Results detail & Quantitative results reported with visualizations or examples & 1 (0.5 + 0.5) \\
+9 & Bias and limitations discussed & Discussion of weaknesses such as occlusions, farm variability, or biases & 1 (0.5 + 0.5) \\
+10 & Contribution to research gaps & Study offers new insights, roadmap, or highlights missing elements & 1 \\
+\hline
+\end{tabularx}
+\end{table*}
+
+
+Each of these criteria were checked to rate the articles. Per criteria met, half or full point was given. Thus, a maximum of 10 points could be scored. Detailed scoring can be found in the supplementary material. During the critical appraisal step, 31 papers were further excluded because they were not related to the topic and therefore were not included in the final list for the critical appraisal. A distribution of appraisal scores is shown in (Figure ~\ref{fig:critical_appraisal}).
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{fig/critical_appraisal_distribution}
+    \caption{The distribution of critical appraisal scores. The red dotted line shows the cutoff score for inclusion in the next stage; orange bars reflect papers scoring less than 8, and blue bars those scoring 8 or higher.}
+    \label{fig:critical_appraisal}
+\end{figure*}
+
+
+% ----------------------------------------------------------------------
+\section{Data extraction and synthesis}
+% ----------------------------------------------------------------------
+
+The 131 primary studies (those scoring 8 or higher on the CASP checklist) were collected and thoroughly analyzed to extract data relevant to each research question. A structured spreadsheet was created, with each study listed in rows and each research question represented in columns, enabling systematic data extraction and summarization.
+
+The extracted data addressed multiple aspects of the research questions, including:
+\begin{itemize}
+    \item The objectives of each study,
+    \item The type of PLF problems investigated,
+    \item The methods of data collection as well as the type, quantity, and quality of the datasets,
+    \item The computer vision (CV) models and neural network architectures employed,
+    \item The performance evaluation metrics used,
+    \item Publication details (e.g., year and journal), and
+    \item The challenges encountered in applying CV techniques to pig-focused PLF.
+\end{itemize}
+% ----------------------------------------------------------------------
+\section{Overview of the included studies}
+% ----------------------------------------------------------------------
+Before addressing the research questions in detail, we provide a descriptive overview of the selected studies, including the journals in which they were published, the most active authors, and the distribution of pig categories represented. This contextual information helps characterize the current research situation on the topic.
+
+Figure~\ref{fig:journals_gt3} summarizes the journals that published at least three of the studies included in this review. Computers and Electronics in Agriculture is the most prominent journal, with 28 papers meeting the inclusion criteria. It is followed by Biosystems Engineering with 9 papers and Agriculture (Switzerland) with 7 papers. Several other journals contribute a smaller number of articles, indicating that research on CV-based PLF in pigs is concentrated in a limited set of specialized venues but also present in a broader range of agricultural and engineering journals.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{fig/journal_distribution_gt3}
+    \caption{Distribution of papers published per journal (only journals with at least three included papers are shown).}
+    \label{fig:journals_gt3}
+\end{figure*}
+
+Figure~\ref{fig:author_distribution} depicts the distribution of publications by author among the selected studies. Thomas Norton appears as the most prolific contributor, with 14 papers included in this review, followed by Y. Hue and M. Oczak, each with 7 publications. A long tail of authors is represented by one or a few papers, reflecting a mix of established research groups and emerging contributors to the field.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{fig/author_appearances_top25}
+    \caption{Distribution of the papers included in the study by the most active authors (top 25).}
+    \label{fig:author_distribution}
+\end{figure*}
+
+The distribution of pig categories across the selected studies is shown in Figure~\ref{fig:animal_distribution}. Adult pigs are markedly over-represented, whereas piglets and sows appear less frequently as focal subjects. This imbalance suggests that current CV research in PLF has largely emphasized growing–finishing pigs, with comparatively fewer efforts dedicated to early life stages or reproductive animals.
+
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{fig/animal_distribution}
+    \caption{Distribution of papers by pig category (e.g., adult pigs, sows, piglets).}
+    \label{fig:animal_distribution}
+\end{figure*}
+
+
+% ----------------------------------------------------------------------
+\section{Results and discussion}
+% ----------------------------------------------------------------------
+
+This section presents the findings of the systematic review. The results are organized according to the research questions defined in the methodology, followed by additional analyses that emerged from patterns observed during data synthesis. Visual summaries (e.g., heatmaps, distributions, and comparative charts) accompany the narrative descriptions to support interpretation of trends and insights derived from the primary studies.
+
+
+\subsection{RQ.1: What are the problems solved using CV for PLF in pig production?}
+
+CV has become a central enabling technology in PLF for pig production, offering continuous, automated, and non-invasive assessment of animals under commercial conditions. \citet{Kashiha2013CEA_MarkedPigs} demonstrated one of the first reliable systems capable of locating and identifying individual pigs in commercial pens, laying the groundwork for a range of applications that rely on accurate individual recognition. Progress in DL later enabled more sophisticated identification and tracking approaches, such as methods that distinguish and follow pigs without external markers \citep{vanderZande2021FrontAnimSci}.
+
+One of the most widely implemented applications of CV in pig production is automated body weight estimation. Traditional weighing procedures are labor-intensive and stressful for animals, while camera-based approaches can compute weight continuously and without disruption \citep{Liu2023Animals_PigMass}. Beyond weight estimation, CV has been extensively applied to monitor behavior and welfare, including aggression detection \citep{Ji2023Animals_AggressiveTSM}, stereotypy recognition, exploratory behaviors, and changes in postures or activity patterns that may signify illness or discomfort \citep{Gan2021CEA_SocialBehaviours}.
+
+Health assessment constitutes another major domain where CV has shown substantial progress, including automated lameness detection through gait and posture analysis \citep{dePaula2024SciRep_Locomotion} and skin lesion detection using CNN-based methods \citep{Bery2024Animals_Lesions}. Feeding and drinking behavior have been analyzed with video-based methods to provide early indicators of health issues \citep{Chen2020CEA_Feeding}. For sows, posture recognition and movement analysis have been used to monitor nursing progress and detect risky events such as piglet crushing \citep{Ferziger2023ASABE_TimeBudgets}.
+
+Since changes in feeding patterns are often early indicators of health issues, automated monitoring systems that track feeding duration, frequency, and competition around feeders are valuable tools for early disease detection. \citep{Chen2020CEA_Feeding}  visual approaches have been used to analyze feeding and drinking behavior, providing complementary insights into feed intake and hydration. Automated posture recognition systems for sows, such as those proposed by \citep{Ferziger2023ASABE_TimeBudgets}, enable continuous monitoring of nursing progress and early detection of risky events such as piglet crushing. By analyzing sow body movements and piglet positions, CV systems can contribute to reducing piglet mortality and improving nursing supervision.
+
+To address RQ1, we identified primary biomarkers, defined as visual observables that enable monitoring tasks such as behavior recognition, posture estimation, welfare assessment, or health evaluation. Each study was assigned one or more biomarkers along with its corresponding PLF application. A summary of these associations is illustrated in Figure~\ref{fig:biomarker_heatmap}, which uses a heatmap to reveal frequently co-occurring pairs.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{fig/biomarker_vs_application_heatmap}
+    \caption{The heatmap of Biomarkers Vs Applications. On the x-axis, 8 applications are shown and on the y-axis 19 biomarkers are shown. The intensity of the color reflects the number of times these tuples appeared after the screening. The highest tuple goes to the application of Welfare using the Behavior Recognition as a Biomarker, followed by the activity monitoring using the detection and tacking technologies. Some other tuples do not exist, either because they are not possible or because they have not been explored yet. For example, Health Status never appeared using Detection or Tracking as Biomarker.}
+    \label{fig:biomarker_heatmap}
+\end{figure*}
+
+\subsection{RQ.2: What are the CV models and networks used for PLF in pig production?}
+
+The most widely used architectures are object-detection models, especially the YOLO family, Faster R-CNN, and SSD. These models perform reliably in commercial pig barns for tasks such as counting, locating animals, and monitoring activity \citep{Almadani2024Digital_YOLOv8Estrus,Gan2021BiosystemsEng_Tracking,Liu2020BiosystemsEng_TailBiting}.
+
+For pixel-level tasks, instance segmentation models are dominant, with Mask R-CNN and specialized variants enabling detailed pig body-shape extraction, posture classification, and group-housing behavior analysis even in crowded pens \citep{Yang2024CEA_LongTermMonitoring,Huang2023CEA_CenterClustering}. Individual identification typically relies on CNN-based classification, using pig-face or pig-head images \citep{Wutke2025SciRep_EarTag}, and more recent PLF systems incorporate vision transformers \citep{Taiwo2025SmartAgTech_ViTInteractions}.
+
+Individual identification typically relies on CNN-based classification, using pig-face or pig-head images. Models derived from lightweight custom CNNs achieve accuracies above 95\%, enabling non-contact tracking of individual animals \citep{Wutke2025SciRep_EarTag}.
+More recent PLF systems are incorporating vision transformers (ViT) and multimodal transformer-based architectures, which improve spatial–temporal reasoning and robustness across lighting and viewpoints \citep{Taiwo2025SmartAgTech_ViTInteractions}.
+Across the dataset, object detection was the most widely used CV task, followed by classification and segmentation (Figure 11). These task-level trends align with the application needs of PLF, where identifying individuals, tracking movements, and recognizing behaviors are central requirements.
+
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{fig/cv_tasks_distribution}
+    \caption{Distribution of computer vision task types (e.g., detection, classification, segmentation) across the selected studies.}
+    \label{fig:cv_tasks_distribution}
+\end{figure*}
+
+Figure ~\ref{fig:model_families} summarizes the distribution of model families. Consistent with the task-level trends, the most frequently used architectures were:
+•	YOLO family (for object detection)
+•	Faster R-CNN (for detection and localization)
+•	Mask R-CNN (for instance segmentation)
+•	ResNet and VGG (for image classification)
+These architectures accounted for the majority of adopted models across studies.
+
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{fig/models_family_distribution}
+    \caption{Distribution of model families (e.g., YOLO, Faster R-CNN, ResNet, VGG) used in pig-focused PLF studies.}
+    \label{fig:model_families}
+\end{figure*}
+
+Furthermore, a subset of studies applied additional machine learning models as downstream components after feature extraction. As shown in Figure ~\ref{fig:downstream_models}, Long Short-Term Memory (LSTM) networks were the most frequently used downstream model, typically in behavior recognition pipelines where temporal dependencies are critical.  
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{fig/downstream_cvtask_stacked_bar}
+    \caption{Distribution of downstream models (e.g., LSTM, transformers) by CV task type.}
+    \label{fig:downstream_models}
+\end{figure*}
+
+The use of transformer-based models remains relatively limited. As illustrated in Figure 14, although transformers first appeared in the literature around 2019, they represent less than 15\% of the models used overall. This suggests a cautious or early-stage adoption of transformers in pig-specific PLF research, despite their growing dominance in general computer vision usage.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{fig/cnn_vs_transformer_share_by_year}
+    \caption{Share of CNN-based versus transformer-based architectures over time.}
+    \label{fig:cnn_vs_transformer}
+\end{figure*}
+
+\subsection{RQ.3: What are the evaluation parameters and approaches used for CV models for PLF in pig production?}
+
+Evaluation of CV models in pig systems typically integrates standard computer-vision metrics, behavioral analysis criteria, and robustness measures tailored to farm environments. Object detection and segmentation models are commonly evaluated using precision, recall, F1-score, Intersection over Union (IoU), Average Precision (AP) and mean Average Precision (mAP) \citep{Ji2023Animals_AggressiveTSM,Gan2024CEA_OcclusionPiglets,Lynge2022SPIE_AutonomousMonitoring}. Multi-object tracking systems rely on MOTA, MOTP, ID-switches, and track fragmentation \citep{Huang2023Sensors_PigCounting,Liu2025Animals_SDGTrack}. 
+
+For morphological estimation tasks like automated weight or body-size prediction, evaluation relies on regression-based indicators including mean absolute error (MAE), root mean square error (RMSE) \citep{daCunha2024LivestockSci_BodyWeight}.
+
+Two aspects were examined: (1) the distribution of evaluation metrics, and (2) the performance ranges reported in the literature.
+
+The most frequently used metrics were Precision, Accuracy, and Recall, as shown in Figure ~\ref{fig:metric_usage}. These metrics dominate evaluation practices across classification, detection, and segmentation tasks. Additional metrics such as F1-score, IoU, mAP, and specificity were used less frequently but appeared in studies requiring more detailed performance assessment.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{fig/metric_usage_barplot}
+    \caption{Distribution of performance metrics (e.g., precision, recall, accuracy, F1) across the selected studies.}
+    \label{fig:metric_usage}
+\end{figure*}
+
+Figure  ~\ref{fig:metric_ranges} illustrates the typical ranges of these metrics across studies. Most works reported performance using standard evaluation measures commonly applied in computer vision, indicating alignment with established benchmarking practices.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{fig/performance_metrics_boxplots_sorted_by_range}
+    \caption{Boxplots of reported performance metrics, sorted by range, illustrating typical performance intervals across studies.}
+    \label{fig:metric_ranges}
+\end{figure*}
+
+\subsection{RQ.4: What are the challenges associated with the CV-based pig identification, detection, behavior and health monitoring?}
+
+Since barn environments are heterogeneous, robustness and generalizability are also core evaluation aspects. CV systems are therefore tested under lighting variation, occlusions, and across distinct farms or pen designs to quantify domain-shift performance and cross-farm generalization \citep{Mattina2023IET_ImageProc,WShigang2021IPEC_PigFace,Bello2024SSRN_Overview,Wang2022Sensors_ResearchProgress}. For practical on-farm deployment, additional operational metrics are considered, such as camera quality and hardware utilization \citep{Yang2024CEA_LongTermMonitoring}. Finally, dataset quality plays a critical role: studies often report inter-annotator agreement, annotation diversity, and ethologically appropriate dataset splits.
+
+The included studies identified a range of challenges that impact model accuracy, robustness, and real-world applicability. These challenges are summarized in Figure ~\ref{fig:challenges} and include:
+\begin{itemize}
+    \item Occlusion, particularly in group housing environments where pigs overlap or cluster
+    \item Lighting variability, caused by artificial illumination, natural light changes, or shadows
+    \item High behavioral complexity, including subtle or ambiguous expressions of welfare-relevant behaviors
+    \item Inconsistent image quality, due to camera placement, dirt, or hardware limitations
+    \item Generalization limitations, where models trained in one environment perform poorly in another    
+\end{itemize}
+
+These findings highlight the need for models capable of handling uncontrolled farm conditions and suggest that cross-farm validation and multimodal data integration remain insufficiently explored.
+
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{fig/challenges_distribution}
+    \caption{Distribution of reported challenges in CV-based pig identification, detection, behavior, and health monitoring.}
+    \label{fig:challenges}
+\end{figure*}
+
+% ----------------------------------------------------------------------
+\section{A closer look at behavior recognition}
+% ----------------------------------------------------------------------
+
+Given its prominence across studies, behavior recognition was examined in detail. Figure  ~\ref{fig:behavior_distribution} presents the distribution of recorded behaviors across studies and illustrates how method choice aligns with application type.
+Posture-related behaviors—such as lying, sitting, and standing—were the most frequently studied, likely due to their strong correlation with welfare and ease of annotation. Feeding-related behaviors (feeding, drinking) formed the second-largest cluster. In contrast, aggressive behaviors appeared in relatively few studies despite their importance for welfare and herd management.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{fig/behavior_full_figure}
+    \caption{Distribution of behaviors (e.g., postural, feeding, aggressive) and associated methods and applications across the reviewed studies. \fix{HASSAN: optimize the plot.}}
+    \label{fig:behavior_distribution}
+\end{figure*}
+
+Figure  ~\ref{fig:behavior_application_alluvial} further maps the behavior categories to their respective applications, revealing opportunities to extend CV-based monitoring into more complex social and health-related behaviors.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{fig/alluvial_behavior_to_application}
+    \caption{Alluvial diagram mapping behavior categories to their application domains in PLF for pigs. \fix{HASSAN: Optimize the plot.}}
+    \label{fig:behavior_application_alluvial}
+\end{figure*}
+
+% ----------------------------------------------------------------------
+\section{Computer vision as a biomarker carrier}
+% ----------------------------------------------------------------------
+
+Computer vision technologies provide a wide range of non-invasive digital biomarkers that reflect the physiological state, behavior, and welfare of pigs. Through continuous analysis of visual data, these systems enable objective and real-time assessment of individual and group-level health indicators.
+
+\begin{itemize}
+    \item Growth and Body Condition - Body weight and body condition can be estimated using 2D top-view cameras, 3D depth sensors, or combined RGB–D systems. Changes in body shape, surface area, or estimated fat: muscle proportions serve as indicators of growth rate, nutritional status, and overall health. Deviations from expected body condition trajectories may signal underfeeding, excessive fat deposition, or emerging illness.
+    \item Locomotion and Lameness - Automated tracking of movement patterns provide biomarkers related to mobility. Gait parameters such as stride length, step symmetry, walking speed, and general activity levels can be quantified with high precision. Irregular locomotion or reductions in movement intensity are early signs of lameness, joint pain, or injury.
+    \item Skin and Lesion Assessment - RGB and multispectral imaging allow automatic detection of skin lesions, including scratches, bite marks, bruising, or swelling. These biomarkers can reflect aggression levels, poor housing conditions, or underlying disease. Thermal imaging enhances lesion detection by highlighting areas of elevated temperature associated with inflammation.
+    \item Respiratory Health - Computer vision combined with depth or thermal sensors can detect thoracic movements associated with breathing. The derived respiration rate and pattern offer biomarkers of respiratory stability. Irregular or elevated respiratory activity may indicate respiratory distress, infection, or environmental stressors such as poor air quality.
+    \item Behavioral Biomarkers - Vision-based tracking systems quantify a variety of behavioral indicators relevant to welfare. Reductions in general activity can signal illness or stress. Monitoring feeding and drinking frequency provides early biomarkers of reduced intake, which often precedes clinical symptoms. Automated detection of social interactions—such as aggression, tail biting, or mounting—offers insights into group dynamics and welfare challenges. Resting and lying postures further provide indicators of discomfort, pain, or thermal imbalance.
+    \item Stress and Thermal Comfort - Thermal cameras measure surface temperature distributions that act as biomarkers of heat stress or fever. Computer vision systems also identify behavioral responses to thermal discomfort, including crowding, panting, or huddling behavior.
+\end{itemize}
+
+\textbf{Advantages of Computer-Vision Biomarkers}
+
+Computer vision provides several advantages over traditional assessment methods. These biomarkers are entirely non-invasive, requiring no physical restraint or tagging. Continuous monitoring enables real-time detection of welfare-relevant changes rather than relying on intermittent human observations. The approach is inherently scalable, as camera systems can monitor large groups simultaneously. Furthermore, automated analysis reduces subjectivity and improves the consistency and repeatability of welfare assessments. 
+
+
+
+% ----------------------------------------------------------------------
+\section{Further analysis}
+% ----------------------------------------------------------------------
+
+In addition to the main research questions, several supplementary aspects based on the information captured in the review table, were analyzed. This dataset provided valuable details that enabled us to identify further trends and insights.
+To better understand how the research community approaches CV for pig production, we categorized each study as either method-focused or application-focused.
+
+\begin{itemize}
+    \item Method-focused papers propose new architectures, model variations, or domain-specific CV techniques tailored to pig farming.
+    \item Application-focused papers typically adopt established models (e.g., YOLO, Faster R-CNN, ResNet) to automate observation tasks or evaluate feasibility in specific production contexts.
+\end{itemize}
+
+Figure \ref{fig:methods_vs_application_year} displays the yearly distribution of both categories. Starting around 2023, the proportion of method-focused studies increased to roughly half of all published papers. This suggests that the engineering and computer science community is investing more heavily in problem-specific model development for pig-oriented PLF tasks.
+
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{fig/methods_vs_applications_per_year}
+    \caption{Yearly distribution of method-focused versus application-focused studies.}
+    \label{fig:methods_vs_application_year}
+\end{figure*}
+
+Figure \ref{fig:journal_type_comparison} further compares these categories across journals, showing that method-focused work often appears in engineering- and computer-vision–oriented journals, whereas application-focused research is more commonly published in animal science and agricultural journals.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{fig/journal_distribution_top3_by_type}
+    \caption{Comparison of method- versus application-focused papers across the top three journals. \fix{HASSAN: Optimize the plot}}
+    \label{fig:journal_type_comparison}
+\end{figure*}
+
+Annotation is a critical step in training supervised CV models. Figure ~\ref{fig:annotation_software} shows the distribution of annotation software reported across the studies. These open-source tools were favored for object detection and segmentation tasks due to their accessibility and ease of use. Fewer studies reported using proprietary or custom-built annotation systems.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{fig/annotation_software_hist}
+    \caption{Distribution of annotation software used in the reviewed studies.}
+    \label{fig:annotation_software}
+\end{figure*}
+
+Reproducibility remains a major challenge in CV research, particularly in agricultural applications where datasets are often proprietary or farm-specific. Figure ~\ref{fig:dataset_code_availability} summarizes the proportion of studies that shared datasets, code, both, or neither. Only 0.7\% of the papers shared both datasets and code.
+Approximately 5.2\% shared code only, and 7.5\% made datasets publicly available. These numbers indicate that the majority of studies cannot be directly reproduced without contacting the authors or accessing closed datasets, which limits benchmarking, validation, and comparative model analysis.
+
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{fig/dataset_code_both_availability_share}
+    \caption{Share of studies offering public datasets, code, both, or neither.}
+    \label{fig:dataset_code_availability}
+\end{figure*}
+
+Further, the sizes of image resolutions were analyzed. The Figure \ref{fig:image_resolutions_top} show that 1920x1080, 1280x720 (both are widescreen formats) and 1024x768 (an older version) are the top 3 used resolutions. 
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{fig/image_resolutions_rectangles_centered}
+    \caption{Distribution of the top used image resolutions across studies.}
+    \label{fig:image_resolutions_top}
+\end{figure*}
+
+Figure \ref{fig:num_labeled_images} overlays the full distribution of image sizes, highlighting the top three. Higher resolutions offer more detail for tasks such as segmentation but increase the computational burden during training and inference.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{fig/num_labeled_images_hist_linear}
+    \caption{Distribution of the number of labeled images used per study (excluding video-frame outliers).}
+    \label{fig:num_labeled_images}
+\end{figure*}
+
+% ----------------------------------------------------------------------
+\section{Gaps and promising future research directions}
+% ----------------------------------------------------------------------
+Recent advances in deep-learning–based computer vision offer substantial potential for improving monitoring and management in pig production, yet several obstacles still hinder widespread application. One of the central limitations is the lack of large, diverse, and consistently annotated datasets collected under commercial conditions \citep{Bhujel2025CEA_PLFdatasets}. Many available datasets stem from single locations or controlled research facilities, restricting model transferability across different production systems. Inconsistencies in labeling methodologies and ethogram definitions further complicate comparisons between studies. 
+Another challenge concerns the robustness of current algorithms. Although many models perform well in standardized environments, their accuracy often declines when confronted with real-world variability such as fluctuating illumination, occlusions, crowded pens, or camera misalignment \citep{Bello2024SSRN_Overview}. Cross-farm generalization and long-term stability remain under investigated. Additionally, despite promising results from depth, thermal, and acoustic sensors, the integration of multiple sensing modalities has been limited, leaving potential gains in early health and welfare detection largely unrealized \citep{Wang2022Sensors_ResearchProgress}.
+Moving from research to practice introduces additional constraints. Only a small number of systems have been validated under extended, on-farm conditions, where low-cost hardware, broadband limitations, and environmental variability pose significant technical challenges. Integration with existing farm management workflows is still emerging, and questions surrounding user acceptance, data governance, and the interpretation of automated outputs continue to receive insufficient attention \citep{Menezes2024AnimalFrontiers_AIforLivestock}.
+Addressing these limitations highlights several important research avenues. The creation and open dissemination of standardized datasets enriched with metadata is essential for improving benchmarking and accelerating innovation. Advances in domain adaptation, generalizable representation learning, and multimodal fusion are likely to enhance model performance under variable conditions and reduce reliance on labor-intensive annotation. Future studies should also emphasize group-level behavioral dynamics—including aggression, social hierarchy, and tail-biting patterns—which are critical for welfare assessment yet remain understudied \citep{Bhujel2025CEA_PLFdatasets}. Achieving real-time performance on resource-limited hardware will be crucial for practical deployment. Finally, incorporating human-centered design principles and developing transparent decision-support tools will support adoption and contribute to more sustainable and welfare-focused production systems \citep{Menezes2024AnimalFrontiers_AIforLivestock}.
+
+
+% ----------------------------------------------------------------------
+\section{Conclusion}
+% ----------------------------------------------------------------------
+
+Computer vision powered by deep learning is increasingly recognized as a promising technology for enhancing precision livestock farming, particularly in pig production. These systems can automatically quantify behavior, track individuals, assess morphology, and detect early signs of health or welfare problems, offering a level of continuity and objectivity that surpasses traditional observational approaches. Although considerable progress has been made, several obstacles continue to prevent seamless integration into commercial practice.
+Current solutions are often sensitive to environmental variability and limited by the scarcity of comprehensive and well-annotated datasets. Many existing models prioritize individual-level assessments and rely primarily on RGB data, leaving more complex behavioral and physiological indicators only partially explored. Furthermore, on-farm implementation remains constrained by hardware limitations, inconsistent lighting conditions, and the need for low-latency processing. Equally important are the human and organizational aspects of technology adoption, including usability, trust, and the practical value of system outputs for day-to-day decision-making.
+Sustained progress will require coordinated efforts across animal science, engineering, and farm management disciplines. Priorities include the development of shared data resources, improved modeling strategies capable of adapting to diverse production environments, and deeper integration of multimodal sensing. Strengthening evaluation frameworks and designing user-oriented interfaces will also play an essential role. By addressing these needs, computer-vision–enabled systems can evolve from experimental tools to reliable components of modern, welfare-oriented, and efficient pig production systems.
+
+
+% ----------------------------------------------------------------------
+\section*{Acknowledgment}
+% ----------------------------------------------------------------------
+
+This project was partially supported by the Swiss National Fund grant number IZSEZ0\_232654.
+
+% ----------------------------------------------------------------------
+\section*{Author contributions}
+% ----------------------------------------------------------------------
+
+Hassan-Roland Nasser (Data curation, Conceptualization, Funding acquisition, Investigation, Supervision, Visualization, Writing – original draft, Writing – review \& editing).
+
+Vladimir Živković (Data curation, Formal analysis, Investigation, Writing – original draft, Writing – review \& editing).
+
+Claudia Kasper-Völkl (Supervision, Visualization, Writing – review \& editing).
+
+\newpage
+% ----------------------------------------------------------------------
+%% Loading bibliography style file
+\bibliographystyle{cas-model2-names}
+\bibliography{plf_pig_cv}
+% \bio{}
+% Author biography for Hassan-Roland Nasser without author photo.
+% \endbio
+
+% \bio{}
+% Author biography for Vladimir Živković without author photo.
+% \endbio
+
+% \bio{}
+% Author biography for Claudia Kasper-Völkl without author photo.
+% \endbio
+
+\end{document}
