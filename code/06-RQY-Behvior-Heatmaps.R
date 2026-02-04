@@ -88,7 +88,7 @@ plot_heatmap(
   xlab = "Category",
   ylab = "Behavior",
   out_path = file.path(im_path, "heatmap_behavior_vs_category.png"),
-  width = 16, height = 14, x_angle = 35, text_size = 3.5
+  width = 10, height = 10, x_angle = 35, text_size = 3.5
 )
 
 
@@ -117,7 +117,7 @@ plot_heatmap(
   col_order = ord$col_order,
   xlab = "Biomarker",
   ylab = "Behavior",
-  out_path = file.path(im_spare, "heatmap_behavior_vs_biomarker.png"),
+  out_path = file.path(im_path, "heatmap_behavior_vs_biomarker.png"),
   width = 18, height = 14, x_angle = 35, text_size = 3.5
 )
 
@@ -185,7 +185,7 @@ plot_heatmap(
   col_order = ord$col_order,
   xlab = "Application",
   ylab = "Category",
-  out_path = file.path(im_spare, "heatmap_category_vs_application.png"),
+  out_path = file.path(im_path, "heatmap_category_vs_application.png"),
   width = 18, height = 10, x_angle = 35, text_size = 4
 )
 

@@ -194,7 +194,14 @@ p <- ggplot(animal_counts,
   labs(x = "Animal Category",
        y = "Number of Studies") +
   theme_classic(base_size = 14) +
-  theme(legend.position = "none")
+  theme(legend.position = "none") + 
+  theme_classic(base_size = 14) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    axis.title = element_text(face = "bold"),
+    legend.position = "top"
+  )
+
 print(p)
 ggsave(file.path(im_path, "animal_distribution.png"), 
        plot = p, width = 8, height = 6, dpi = 300)

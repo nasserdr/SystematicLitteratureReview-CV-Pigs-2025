@@ -23,9 +23,11 @@ p <- ggplot(tasks_count, aes(x = CV_Task, y = n)) +
   labs(x = "Computer Vision Task", y = "Number of Studies") +
   theme_classic(base_size = 14) +
   theme(
-    legend.position = "none",
-    plot.margin = margin(10, 30, 10, 10)                   # more right margin
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    axis.title = element_text(face = "bold"),
+    legend.position = "top"
   )
+
 
 print(p)
 ggsave(file.path(im_path, "cv_tasks_distribution.png"),
@@ -63,12 +65,13 @@ p_models <- ggplot(models_ge2, aes(x = fct_reorder(Family, Count), y = Count)) +
     x = "Model Family",
     y = "Number of Studies"
   ) +
-  theme_classic(base_size = 13) +
+  theme_classic(base_size = 14) +
   theme(
     plot.title = element_text(hjust = 0.5, face = "bold"),
     axis.title.y = element_text(face = "bold"),
     plot.margin = margin(10, 30, 10, 10)  # room for right-side labels
   )
+
 
 print(p_models)
 
@@ -158,12 +161,13 @@ p <- ggplot(plot_df, aes(x = Downstream_Model, y = Frequency, fill = CV_Task)) +
     y = "Count",
     fill = "CV Task"
   ) +
-  theme_classic(base_size = 12) +
+  theme_classic(base_size = 14) +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1),
-    panel.grid.minor = element_blank()
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    axis.title = element_text(face = "bold")
   ) + theme(plot.margin = margin(t = 10, r = 10, b = 10, l = 20))
-
 
 print(p)
 ggsave(file.path(im_path,"downstream_cvtask_stacked_bar.png"), p, width = 15, height = 6.5, dpi = 300)

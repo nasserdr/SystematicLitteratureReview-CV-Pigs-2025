@@ -47,15 +47,18 @@ p <- ggplot(metrics_long, aes(x = value, y = Metric)) +
     x = "Metric Value",
     y = "Metric Name"
   ) +
-  theme_classic(base_size = 13) +
+  coord_flip() +
+  theme_classic(base_size = 14) +
   theme(
     plot.title = element_text(hjust = 0.5, face = "bold"),
-    axis.title.x = element_text(face = "bold")
+    axis.title.x = element_text(face = "bold"),
+    axis.text.x = element_text(angle = 35, hjust = 1)
+    
   )
-h_inches <- 4 + 0.28 * length(unique(metrics_long$Metric))
+
 p
 ggsave(file.path(im_path,"performance_metrics_boxplots_sorted_by_range.png"),
-       plot = p, width = 12, height = h_inches, dpi = 300)
+       plot = p, width = 12, height = 6, dpi = 300)
 
 
 ################################################################################
@@ -93,7 +96,7 @@ p_usage <- ggplot(metric_usage, aes(x = fct_reorder(Metric, Count), y = Count)) 
     x = "Metric",
     y = "Number of Studies"
   ) +
-  theme_classic(base_size = 13) +                                  # match earlier plots
+  theme_classic(base_size = 14) +                                  # match earlier plots
   theme(
     plot.title = element_text(hjust = 0.5, face = "bold"),
     axis.title.y = element_text(face = "bold"),

@@ -40,7 +40,7 @@ source(file.path(dir, "code/02-RQ1.R"))                      # Research Question
 source(file.path(dir, "code/03-RQ2.R"))                      # Research Question 2  
 source(file.path(dir, "code/04-RQ3.R"))                      # Research Question 3
 source(file.path(dir, "code/05-RQ4.R"))                      # Research Question 4
-source(file.path(dir, "code/06-RQY-Behavior.R"))             # Behavior analysis
+source(file.path(dir, "code/06-RQY-Behvior-Heatmaps.R"))             # Behavior analysis
 source(file.path(dir, "code/07-RQZ-FurtherQuestions.R"))     # Additional questions
 
 message("=== Image Production Completed ===")

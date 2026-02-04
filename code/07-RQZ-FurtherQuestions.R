@@ -200,11 +200,14 @@ p_rects_origin <- ggplot(rects) +
   scale_x_continuous(breaks = scales::pretty_breaks(6)) +
   scale_y_continuous(breaks = scales::pretty_breaks(6)) +
   labs(x = "Width (px)", y = "Height (px)") +
-  theme_classic(base_size = 13) +
+  theme_classic(base_size = 14) +
   theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    axis.title = element_text(face = "bold"),
     panel.grid.minor = element_blank(),
     plot.margin = margin(12, 12, 12, 12)
   )
+
 print(p_rects_origin)
 ggsave(file.path(im_path,"image_resolutions_rectangles_centered.png"),
        plot = p_rects_origin, width = 7.5, height = 7.5, dpi = 300)
