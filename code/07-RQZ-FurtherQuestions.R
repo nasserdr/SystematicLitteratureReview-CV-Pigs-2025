@@ -50,7 +50,7 @@ p <- ggplot() +
 
 print(p)
 ggsave(
-  filename = file.path(im_path,"methods_vs_applications_per_year.tiff"),
+  filename = file.path(im_path,"methods_vs_applications_per_year.png"),
   plot = p,
   width = 9,   # inches
   height = 6,  # inches
@@ -108,7 +108,7 @@ p_bar <- ggplot(anno_counts, aes(x = Annotation_Software, y = n)) +
 
 print(p_bar)
 
-ggsave(file.path(im_path,"annotation_software_hist.tiff"),
+ggsave(file.path(im_path,"annotation_software_hist.png"),
        plot = p_bar, width = 9, height = 6, dpi = 300)
 
 #Distribution of the number of labeled images 
@@ -141,7 +141,7 @@ p_linear <- ggplot(df_counts, aes(x = n_labeled)) +
   )
 
 print(p_linear)
-ggsave(file.path(im_path,"num_labeled_images_hist_linear.tiff"),
+ggsave(file.path(im_path,"num_labeled_images_hist_linear.png"),
        plot = p_linear, width = 8, height = 5.5, dpi = 300)
 
 #Distribution of the image sizes (just like the bouding boxes ones overlay) - How to tell size of images and number of images at once?
@@ -206,7 +206,7 @@ p_rects_origin <- ggplot(rects) +
     plot.margin = margin(12, 12, 12, 12)
   )
 print(p_rects_origin)
-ggsave(file.path(im_path,"image_resolutions_rectangles_centered.tiff"),
+ggsave(file.path(im_path,"image_resolutions_rectangles_centered.png"),
        plot = p_rects_origin, width = 7.5, height = 7.5, dpi = 300)
 
 #Availibility of codes and datasets publicly
@@ -260,5 +260,5 @@ p <- ggplot(summary_df, aes(x = Type, y = n, fill = Status)) +
     legend.position = "top"
   )
 print(p)
-ggsave(file.path(im_path,"dataset_code_both_availability_share.tiff"),
+ggsave(file.path(im_path,"dataset_code_both_availability_share.png"),
        plot = p, width = 8, height = 5.5, dpi = 300)

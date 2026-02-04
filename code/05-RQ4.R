@@ -34,6 +34,6 @@ p_challenges <- ggplot(challenge_counts, aes(x = reorder(Challenge, Count), y = 
 
 print(p_challenges)
 
-ggsave(file.path(im_path,"challenges_distribution.tiff"),
+ggsave(file.path(im_path,"challenges_distribution.png"),
        plot = p_challenges, width = 10, height = 7, dpi = 300)
 

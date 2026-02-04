@@ -28,7 +28,7 @@ p <- ggplot(tasks_count, aes(x = CV_Task, y = n)) +
   )
 
 print(p)
-ggsave(file.path(im_path, "cv_tasks_distribution.tiff"),
+ggsave(file.path(im_path, "cv_tasks_distribution.png"),
        plot = p, width = 10, height = 6, dpi = 300)
 
 ################################################################################
@@ -72,7 +72,7 @@ p_models <- ggplot(models_ge2, aes(x = fct_reorder(Family, Count), y = Count)) +
 
 print(p_models)
 
-ggsave(file.path(im_path,"models_family_distribution.tiff"), 
+ggsave(file.path(im_path,"models_family_distribution.png"), 
        plot = p_models, width = 10, height = 8, dpi = 300)
 
 
@@ -121,7 +121,7 @@ p <- ggplot(per_year_counts, aes(x = factor(Year), y = count, fill = Family)) +
     legend.position = "top"
   )
 print(p)
-ggsave(file.path(im_path,"cnn_vs_transformer_share_by_year.tiff"),
+ggsave(file.path(im_path,"cnn_vs_transformer_share_by_year.png"),
        plot = p, width = 9, height = 6.5, dpi = 300)
 
 
@@ -166,4 +166,4 @@ p <- ggplot(plot_df, aes(x = Downstream_Model, y = Frequency, fill = CV_Task)) +
 
 
 print(p)
-ggsave(file.path(im_path,"downstream_cvtask_stacked_bar.tiff"), p, width = 15, height = 6.5, dpi = 300)
+ggsave(file.path(im_path,"downstream_cvtask_stacked_bar.png"), p, width = 15, height = 6.5, dpi = 300)

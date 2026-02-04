@@ -18,7 +18,7 @@ p <- ggplot(df_critical, aes(x = `Total Score`, fill = Inclusion)) +
     legend.position = "top"
   )
 print(p)
-ggsave(file.path(im_path, "critical_appraisal_distribution.tiff"), 
+ggsave(file.path(im_path, "critical_appraisal_distribution.png"), 
        plot = p, width = 8, height = 6, dpi = 300)
 
 
@@ -57,7 +57,7 @@ p <- ggplot(journal_counts_filtered, aes(x = fct_reorder(Journal, n), y = n)) +
   )
 
 print(p)
-ggsave(file.path(im_path,"journal_distribution_gt3.tiff"),
+ggsave(file.path(im_path,"journal_distribution_gt3.png"),
        plot = p, width = 10, height = 7, dpi = 300)
 
 # TopK by methods and applications:
@@ -121,7 +121,7 @@ p_topk <- ggplot(journal_counts_by_type, aes(x = Journal, y = n)) +
 
 print(p_topk)
 
-ggsave(file.path(im_path, paste0("journal_distribution_top", top_k, "_by_type.tiff")),
+ggsave(file.path(im_path, paste0("journal_distribution_top", top_k, "_by_type.png")),
        plot = p_topk, width = 12, height = 7, dpi = 300)
 
 #Top 25 authors by paper appearances
@@ -170,7 +170,7 @@ p <- ggplot(author_counts_top, aes(x = Author, y = n)) +
 
 print(p)
 
-ggsave(file.path(im_path,"author_appearances_top25.tiff"),
+ggsave(file.path(im_path,"author_appearances_top25.png"),
        plot = p, width = 9, height = 6, dpi = 300)
 
 
@@ -195,6 +195,6 @@ p <- ggplot(animal_counts,
   theme_classic(base_size = 14) +
   theme(legend.position = "none")
 print(p)
-ggsave(file.path(im_path, "animal_distribution.tiff"), 
+ggsave(file.path(im_path, "animal_distribution.png"), 
        plot = p, width = 8, height = 6, dpi = 300)
 

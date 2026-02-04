@@ -46,7 +46,7 @@ p_app <- count_and_plot(app_long, Application, "Applications")
 p_sub <- count_and_plot(sub_long, Subapplication, "Subapplications")
 combined_plot <- p_bio + p_app + p_sub + plot_layout(ncol = 3)
 print(combined_plot)
-ggsave(file.path(im_spare, "biomarker_application_subapplication_histograms.tiff"),
+ggsave(file.path(im_spare, "biomarker_application_subapplication_histograms.png"),
        plot = combined_plot, width = 15, height = 8, dpi = 300)
 
 
@@ -104,7 +104,7 @@ p_heat <- ggplot(bio_app_counts,
     axis.text.x = element_text(angle = 35, hjust = 1)
   )
 print(p_heat)
-ggsave(file.path(im_path,"biomarker_vs_application_heatmap.tiff"),
+ggsave(file.path(im_path,"biomarker_vs_application_heatmap.png"),
        plot = p_heat, width = 11, height = 8, dpi = 300)
 
 #Heatmap of biomarkers vs applications vs Subspplications, Alluvial
@@ -193,7 +193,7 @@ p_alluvial <- ggplot(
 
 p_alluvial
 
-ggsave(file.path(im_spare, "alluvial_biomarker_application_subapplication.tiff"),
+ggsave(file.path(im_spare, "alluvial_biomarker_application_subapplication.png"),
        p_alluvial, width = 50, height = 50, dpi = 400, limitsize = FALSE)
 ggsave(file.path(im_spare,"alluvial_biomarker_application_subapplication.pdf"),
        p_alluvial, width = 50, height = 50, limitsize = FALSE)

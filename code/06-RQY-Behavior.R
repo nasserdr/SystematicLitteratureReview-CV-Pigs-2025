@@ -134,7 +134,7 @@ p <- ggplot(df_plot, aes(x = Behavior, y = n_signed, fill = Category)) +
     axis.text.y = element_text(hjust = 1, size = 12)
   )
 print(p)
-ggsave(file.path(im_path, "behavior_full_figure.tiff"), p, width = 10, height = 10, dpi = 300)
+ggsave(file.path(im_path, "behavior_full_figure.png"), p, width = 10, height = 10, dpi = 300)
 
 
 # ===========================================================
