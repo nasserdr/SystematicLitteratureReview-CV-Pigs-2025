@@ -3,7 +3,7 @@ library(tidyr)
 library(stringr)
 library(ggplot2)
 library(forcats)
-
+library(patchwork)
 split_re <- "\\s*(?:,|;|/|\\+|&|\\band\\b)\\s*"
 
 clean_str <- function(x) {
@@ -31,7 +31,7 @@ make_orders <- function(df, row_var, col_var, n_var = "n") {
   list(row_order = row_order, col_order = col_order)
 }
 
-# Behavior Vs Category of Behavior Vs applications / methods
+# Behavior applications / methods
 
 df_long <- df_full_screening %>%
   select(Behavior, Methods) %>%
@@ -97,6 +97,45 @@ p <- ggplot(df_plot, aes(x = Behavior, y = n_signed, fill = Category)) +
 print(p)
 ggsave(file.path(im_path, "behavior_full_figure.png"), p, width = 15, height = 10, dpi = 300)
 
+# Heatmap Biomarker Vs Application
+df_ids <- df_full_screening %>%
+  transmute(
+    .row_id = row_number(),
+    Biomarker   = clean_str(Biomarker),
+    Application = clean_str(Application)
+  )
+
+bio_pairs <- df_ids %>%
+  filter(!is.na(Biomarker), Biomarker != "Unknown") %>%
+  separate_rows(Biomarker, sep = split_re) %>%
+  mutate(Biomarker = str_to_title(str_squish(Biomarker))) %>%
+  filter(Biomarker != "") %>%
+  select(.row_id, Biomarker)   # << IMPORTANT
+
+app_pairs <- df_ids %>%
+  filter(!is.na(Application), Application != "Unknown") %>%
+  separate_rows(Application, sep = split_re) %>%
+  mutate(Application = str_to_title(str_squish(Application))) %>%
+  filter(Application != "") %>%
+  select(.row_id, Application) # << IMPORTANT
+
+bio_app_counts <- bio_pairs %>%
+  inner_join(app_pairs, by = ".row_id", relationship = "many-to-many") %>% # expected
+  count(Biomarker, Application, name = "n")
+
+ord <- make_orders(bio_app_counts, row_var = "Biomarker", col_var = "Application")
+
+p_bio_app <- plot_heatmap(
+  bio_app_counts,
+  row_var = "Biomarker",
+  col_var = "Application",
+  row_order = ord$row_order,
+  col_order = ord$col_order,
+  xlab = "Application",
+  ylab = "Biomarker",
+  out_path = file.path(im_path, "heatmap_biomarker_vs_application.png"),
+  width = 11, height = 8, x_angle = 35, text_size = 4
+)
 
 
 # Heatmaps of Behavior vs Category, Biomarker, Application
@@ -153,7 +192,7 @@ behav_cat_counts <- df_full_screening %>%
 
 ord <- make_orders(behav_cat_counts, row_var = "Behavior", col_var = "Category")
 
-plot_heatmap(
+p_behav_cat <- plot_heatmap(
   behav_cat_counts,
   row_var = "Behavior",
   col_var = "Category",
@@ -183,7 +222,7 @@ behav_biom_counts <- df_full_screening %>%
 
 ord <- make_orders(behav_biom_counts, row_var = "Behavior", col_var = "Biomarker")
 
-plot_heatmap(
+p_behav_biom <- plot_heatmap(
   behav_biom_counts,
   row_var = "Behavior",
   col_var = "Biomarker",
@@ -212,7 +251,7 @@ behav_app_counts <- df_full_screening %>%
 
 ord <- make_orders(behav_app_counts, row_var = "Behavior", col_var = "Application")
 
-plot_heatmap(
+p_behav_app <- plot_heatmap(
   behav_app_counts,
   row_var = "Behavior",
   col_var = "Application",
@@ -251,7 +290,7 @@ cat_app_counts <- df_full_screening %>%
 
 ord <- make_orders(cat_app_counts, row_var = "Category", col_var = "Application")
 
-plot_heatmap(
+p_cat_app <- plot_heatmap(
   cat_app_counts,
   row_var = "Category",
   col_var = "Application",
@@ -263,39 +302,15 @@ plot_heatmap(
   width = 18, height = 10, x_angle = 35, text_size = 4
 )
 
-df_ids <- df_full_screening %>%
-  transmute(
-    .row_id = row_number(),
-    Biomarker   = clean_str(Biomarker),
-    Application = clean_str(Application)
-  )
+# Merge all the 4 heatmaps together
+combined_heatmaps <-
+  (p_behav_cat | p_behav_biom) /
+  (p_behav_app | p_cat_app)
+  plot_layout(guides = "collect") &
+  theme(legend.position = "bottom")
 
-bio_pairs <- df_ids %>%
-  filter(!is.na(Biomarker), Biomarker != "Unknown") %>%
-  separate_rows(Biomarker, sep = split_re) %>%
-  mutate(Biomarker = str_to_title(str_squish(Biomarker))) %>%
-  filter(Biomarker != "")
-
-app_pairs <- df_ids %>%
-  filter(!is.na(Application), Application != "Unknown") %>%
-  separate_rows(Application, sep = split_re) %>%
-  mutate(Application = str_to_title(str_squish(Application))) %>%
-  filter(Application != "")
-
-bio_app_counts <- bio_pairs %>%
-  inner_join(app_pairs, by = ".row_id") %>%
-  count(Biomarker, Application, name = "n")
-
-ord <- make_orders(bio_app_counts, row_var = "Biomarker", col_var = "Application")
-
-plot_heatmap(
-  bio_app_counts,
-  row_var = "Biomarker",
-  col_var = "Application",
-  row_order = ord$row_order,
-  col_order = ord$col_order,
-  xlab = "Application",
-  ylab = "Biomarker",
-  out_path = file.path(im_path, "heatmap_biomarker_vs_application.png"),
-  width = 11, height = 8, x_angle = 35, text_size = 4
+ggsave(
+  filename = file.path(im_path, "heatmaps_all_combined.png"),
+  plot = combined_heatmaps,
+  width = 22, height = 18, dpi = 300, limitsize = FALSE
 )
