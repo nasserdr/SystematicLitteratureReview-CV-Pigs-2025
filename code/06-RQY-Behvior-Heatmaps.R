@@ -31,6 +31,75 @@ make_orders <- function(df, row_var, col_var, n_var = "n") {
   list(row_order = row_order, col_order = col_order)
 }
 
+# Behavior Vs Category of Behavior Vs applications / methods
+
+df_long <- df_full_screening %>%
+  select(Behavior, Methods) %>%
+  mutate(Behavior = str_split(Behavior, ",\\s*")) %>%  # split by commas
+  unnest(Behavior) %>%                                 # expand into multiple rows
+  mutate(Behavior = str_trim(Behavior))                # trim spaces
+
+df_final <- df_long %>%
+  left_join(df_lookup, by = "Behavior") %>%
+  rename(Category = Category) %>%  # or Behavior category if you prefer
+  rename(Methods_old = Methods) %>%   # temporarily rename
+  mutate(Type = if_else(Methods_old == "No", "Application", "Method")) %>%
+  select(-Methods_old)     %>%           # remove old column
+  filter(!is.na(Behavior), !is.na(Category))
+
+df_counts <- df_final %>%
+  count(Category, Type, Behavior, name = "n")
+
+df_plot <- df_counts %>%
+  # total per behavior (for ordering)
+  group_by(Behavior, Category) %>%
+  mutate(total_n = sum(n)) %>%
+  ungroup() %>%
+  # order behaviors by Category, then by total_n
+  arrange(Category, desc(total_n)) %>%
+  mutate(
+    Behavior = factor(Behavior, levels = unique(Behavior)),
+    n_signed = if_else(Type == "Method", -n, n)  # Method left, Application right
+  )
+
+# symmetric axis limit
+max_n <- max(df_plot$n)
+
+# --- 2. Plot ---
+
+p <- ggplot(df_plot, aes(x = Behavior, y = n_signed, fill = Category)) +
+  # thick vertical line at zero (horizontal before flip)
+  geom_hline(yintercept = 0, linewidth = 1) +
+  geom_col() +
+  coord_flip() +
+  scale_y_continuous(
+    limits = c(-10, max_n),
+    labels = function(x) abs(x)  # show positive numbers on both sides
+  ) +
+  labs(
+    x = NULL,
+    y = "Number of occurrences\n(Methods left, Applications right)",
+    fill = "Category",
+  ) +
+  theme_minimal(base_size = 13) +
+  theme_classic(base_size = 13) +                                         # consistent theme
+  theme(
+    axis.text.x  = element_text(hjust = 1,size = 14),
+    axis.text.y  = element_text(size = 14),
+    axis.title.x = element_text(size = 14, face = "bold"),
+    axis.title.y = element_text(size = 14, face = "bold"),
+    legend.text  = element_text(size = 14),
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    axis.title = element_text(face = "bold"),
+    plot.margin = margin(10, 40, 10, 10)                                  # extra margin for labels
+  )
+
+print(p)
+ggsave(file.path(im_path, "behavior_full_figure.png"), p, width = 15, height = 10, dpi = 300)
+
+
+
+# Heatmaps of Behavior vs Category, Biomarker, Application
 plot_heatmap <- function(df_counts, row_var, col_var, row_order, col_order,
                          xlab, ylab, out_path = NULL,
                          width = 12, height = 8, dpi = 300,
